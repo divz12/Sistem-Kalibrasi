@@ -409,36 +409,35 @@ include 'komponen/navbar.php';
         <div class="row gy-4 mt-1">
 
         <!-- Contact Form -->
-          <div class="col">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
-              <div class="row gy-4">
+          <div class="row gy-4 mt-1">
+            <div class="col">
+              <form action="proses_contact.php" method="post"
+                    class="php-email-form" data-aos="fade-up" data-aos-delay="400">
+                <div class="row gy-4">
 
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                  <div class="col-md-6">
+                    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                  </div>
+
+                  <div class="col-md-12">
+                    <input type="text" class="form-control" name="subject" placeholder="Subject" required>
+                  </div>
+
+                  <div class="col-md-12">
+                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required></textarea>
+                  </div>
+
+                  <div class="col-md-12 text-center">
+                    <button type="submit">Send Message</button>
+                  </div>
+
                 </div>
-
-                <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Send Message</button>
-                </div>
-
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
           <!-- End Contact Form -->
 
@@ -455,3 +454,14 @@ include 'komponen/navbar.php';
 include 'komponen/footer.php';
 
 ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form.php-email-form");
+  if (!form) return;
+
+  // hapus data form setelah submit untuk mencegah pengiriman ulang
+  const clone = form.cloneNode(true);
+  form.parentNode.replaceChild(clone, form);
+});
+</script>
