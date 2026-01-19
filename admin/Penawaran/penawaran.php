@@ -9,14 +9,13 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-/* ambil data penawaran + pengajuan + pelanggan + user */
 $sql = "
   SELECT
     tbl_penawaran.id_penawaran,
@@ -51,7 +50,7 @@ if (!$hasil) {
   die("Query gagal: " . mysqli_error($conn));
 }
 
-/* total penawaran */
+// hitung total penawaran
 $sqlTotal = "SELECT COUNT(*) AS total FROM tbl_penawaran";
 $hasilTotal = mysqli_query($conn, $sqlTotal);
 $dataTotal = mysqli_fetch_assoc($hasilTotal);

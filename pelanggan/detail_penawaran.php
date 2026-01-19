@@ -16,7 +16,6 @@ if ($id_penawaran <= 0) {
   exit();
 }
 
-// ambil id_pelanggan
 $qPel = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
 $dataPel = mysqli_fetch_assoc($qPel);
 $id_pelanggan = (int)($dataPel['id_pelanggan'] ?? 0);
@@ -26,9 +25,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-/*
-  ambil detail penawaran yang MILIK pelanggan ini
-*/
 $sql = "
   SELECT
     tbl_penawaran.id_penawaran,
@@ -57,7 +53,6 @@ if (!$penawaran) {
   exit();
 }
 
-// ambil daftar alat dari pengajuan (biar detailnya lengkap)
 $id_pengajuan = (int)($penawaran['id_pengajuan'] ?? 0);
 
 $sqlAlat = "
@@ -76,7 +71,7 @@ $sqlAlat = "
 ";
 $alat = mysqli_query($conn, $sqlAlat);
 
-// badge status penawaran
+// status penawaran
 $badge = "bg-secondary";
 $statusPenawaran = $penawaran['status_penawaran'] ?? "-";
 if ($statusPenawaran == "dikirim") $badge = "bg-primary";

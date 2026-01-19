@@ -9,14 +9,13 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-/* Ambil daftar pengajuan + nama pelanggan + info penawaran */
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -55,12 +54,13 @@ if (!$hasil) {
   die("Query gagal: " . mysqli_error($conn));
 }
 
-/* Statistik singkat */
+// hitung total pengajuan
 $sqlTotal = "SELECT COUNT(*) AS total FROM tbl_pengajuan_kalibrasi";
 $hasilTotal = mysqli_query($conn, $sqlTotal);
 $dataTotal = mysqli_fetch_assoc($hasilTotal);
 $totalPengajuan = $dataTotal["total"] ?? 0;
 
+// hitung total berdasarkan status
 $sqlDikirim = "SELECT COUNT(*) AS total FROM tbl_pengajuan_kalibrasi WHERE status_pengajuan = 'dikirim'";
 $hasilDikirim = mysqli_query($conn, $sqlDikirim);
 $dataDikirim = mysqli_fetch_assoc($hasilDikirim);

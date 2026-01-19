@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: invoice.php?msg=err");
   exit();
 }
@@ -32,7 +32,6 @@ if ($idInvoice <= 0) {
   exit();
 }
 
-/* Ambil data invoice lama (untuk file lama) */
 $sqlLama = "
   SELECT nama_file_invoice, lokasi_file_invoice
   FROM tbl_invoice
@@ -45,17 +44,16 @@ $dataLama = mysqli_fetch_assoc($hasilLama);
 $namaFileLama = $dataLama["nama_file_invoice"] ?? "";
 $lokasiFileLama = $dataLama["lokasi_file_invoice"] ?? "";
 
-/* default pakai file lama */
 $namaFileBaru = $namaFileLama;
 $lokasiFileBaru = $lokasiFileLama;
 
-/* CEK kalau ada upload file baru */
+// jika ada file baru diupload
 if (!empty($_FILES["file_invoice"]["name"])) {
 
   $namaFile = $_FILES["file_invoice"]["name"];
   $lokasiSementara = $_FILES["file_invoice"]["tmp_name"];
 
-  /* folder tujuan */
+  // buat folder kalau belum ada
   $folderTujuan = "../../file_invoice/";
   if (!is_dir($folderTujuan)) {
     mkdir($folderTujuan, 0777, true);
@@ -66,11 +64,11 @@ if (!empty($_FILES["file_invoice"]["name"])) {
   $terupload = move_uploaded_file($lokasiSementara, $lokasiTujuan);
 
   if ($terupload) {
-    /* simpan path untuk DB (relatif dari folder Sistem-Kalibrasi) */
+    // set nama file dan lokasi file baru
     $namaFileBaru = $namaFile;
     $lokasiFileBaru = "file_invoice/" . $namaFile;
 
-    /* hapus file lama kalau ada */
+    // hapus file lama
     if ($lokasiFileLama != "") {
       $pathHapus = "../../" . $lokasiFileLama;
       if (file_exists($pathHapus)) {
@@ -84,7 +82,6 @@ if (!empty($_FILES["file_invoice"]["name"])) {
   }
 }
 
-/* UPDATE invoice */
 $sqlUpdate = "
   UPDATE tbl_invoice SET
     nomor_invoice = '$nomorInvoice',

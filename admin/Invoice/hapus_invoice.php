@@ -9,10 +9,11 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
+
 
 $idInvoice = (int)($_GET["id"] ?? 0);
 if ($idInvoice <= 0) {

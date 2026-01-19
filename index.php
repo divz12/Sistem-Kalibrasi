@@ -43,19 +43,21 @@ include 'komponen/navbar.php';
 
 
                 <div class="d-flex flex-column gap-3">
-                <a href="https://wa.me/6285218532578" 
+                <a href="https://wa.me/6285780717207" 
                     class="btn btn-primary d-flex align-items-center gap-2 px-4 py-3"
                     style="max-width: 360px;">
                     <i class="bi bi-whatsapp fs-5"></i>
-                    <span>Call: +62 852-1853-2578</span>
+                    <span>Call: +62 857-8071-7207</span>
                 </a>
 
-                <a href="mailto:akbarteraabadi@gmail.com" 
-                    class="btn btn-primary d-flex align-items-center gap-2 px-4 py-3"
-                    style="max-width: 360px;">
-                    <i class="bi bi-envelope fs-5"></i>
-                    <span>Email: akbarteraabadi@gmail.com</span>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=akbarteraabadi@gmail.com"
+                  target="_blank"
+                  class="btn btn-primary d-flex align-items-center gap-2 px-4 py-3"
+                  style="max-width: 360px;">
+                  <i class="bi bi-envelope fs-5"></i>
+                  <span>Email: akbarteraabadi@gmail.com</span>
                 </a>
+
                 </div>
             </div>
 
@@ -80,7 +82,7 @@ include 'komponen/navbar.php';
               <div class="icon flex-shrink-0"><i class="bi bi-briefcase"></i></div>
               <div>
                 <h4 class="title pt-4 pb-4">Kecepatan Layanan</h4>
-              </div>c 
+              </div> 
             </div>
           </div>
 
@@ -137,7 +139,7 @@ include 'komponen/navbar.php';
           </div>
 
           <div class="col-lg-6 about-images" data-aos="fade-up" data-aos-delay="200">
-            <div class="row gy-4 mt-5 pt-4">
+            <div class="row gy-4 pt-3">
               <div class="col-lg-6">
                 <img src="assets/img/03.png" class="img-fluid" alt="">
               </div>
@@ -268,12 +270,12 @@ include 'komponen/navbar.php';
     <!-- Ruang Lingkup Section -->
      <div class="container section-title" data-aos="fade-up">
         <h2>Ruang Lingkup</h2>
+        <p>Jenis alat ukur yang kami layani untuk kalibrasi</p>
     </div>
     <section id="more-features" class="more-features section">
         <div class="container">
             <div class="row justify-content-around gy-4">
 
-            <!-- Kiri: Teks & Ruang Lingkup -->
             <div class="col-lg-6 d-flex flex-column justify-content-center order-2 order-lg-1" data-aos="fade-up" data-aos-delay="100">
                 <h3>Ruang Lingkup Layanan Kalibrasi</h3>
                 <p>
@@ -356,7 +358,6 @@ include 'komponen/navbar.php';
                 </div>
             </div>
 
-            <!-- Kanan: Gambar -->
             <div class="features-image col-lg-5 order-1" data-aos="fade-up" data-aos-delay="200">
                 <img src="assets/img/alat.jpg" class="img-fluid rounded-4" alt="">
             </div>
@@ -372,7 +373,8 @@ include 'komponen/navbar.php';
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
         <h2>Contact</h2>
-      </div><!-- End Section Title -->
+      </div>
+      <!-- End Section Title -->
 
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -384,7 +386,7 @@ include 'komponen/navbar.php';
               <h3>Address</h3>
               <p>Kab. Bogor, Jawa Barat, Indonesia</p>
             </div>
-          </div><!-- End Info Item -->
+          </div>
 
           <div class="col-lg-3 col-md-6">
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="300">
@@ -392,7 +394,7 @@ include 'komponen/navbar.php';
               <h3>Call Us</h3>
               <p>+62 857-8071-7207</p>
             </div>
-          </div><!-- End Info Item -->
+          </div>
 
           <div class="col-lg-3 col-md-6">
             <div class="info-item d-flex flex-column justify-content-center align-items-center" data-aos="fade-up" data-aos-delay="400">
@@ -400,12 +402,13 @@ include 'komponen/navbar.php';
               <h3>Email Us</h3>
               <p>akbarteraabadi@gmail.com</p>
             </div>
-          </div><!-- End Info Item -->
+          </div>
 
         </div>
 
         <div class="row gy-4 mt-1">
 
+        <!-- Contact Form -->
           <div class="col">
             <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="400">
               <div class="row gy-4">
@@ -436,7 +439,8 @@ include 'komponen/navbar.php';
 
               </div>
             </form>
-          </div><!-- End Contact Form -->
+          </div>
+          <!-- End Contact Form -->
 
         </div>
 

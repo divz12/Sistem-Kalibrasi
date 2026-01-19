@@ -188,7 +188,7 @@ include "komponen/navbar.php";
       <div class="col-lg-7">
         <div class="card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
-            <h5 class="mb-0">Status Pengajuan Terbaru</h5>
+            <h5 class="mb-0">Pengajuan Terbaru</h5>
             <a href="riwayat_pengajuan.php" class="btn btn-sm btn-outline-primary">Lihat semua</a>
           </div>
 
@@ -219,7 +219,7 @@ include "komponen/navbar.php";
                   Detail Pengajuan
                 </a>
                 <a href="penawaran.php" class="btn btn-outline-primary">Cek Penawaran</a>
-                <a href="status_proses.php" class="btn btn-outline-primary">Lihat Status Proses</a>
+                <a href="status_proses.php" class="btn btn-outline-primary">Lihat Status</a>
               </div>
             <?php endif; ?>
           </div>

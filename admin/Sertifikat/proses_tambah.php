@@ -9,25 +9,24 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
-/* ambil data form */
 $idPengajuan = (int)($_POST["id_pengajuan"] ?? 0);
 $nomorSertifikat = $_POST["nomor_sertifikat"] ?? "";
 $tanggalTerbit = $_POST["tanggal_terbit"] ?? "";
 $keteranganSertifikat = $_POST["keterangan_sertifikat"] ?? "";
 
-/* upload file */
+// upload file sertifikat
 $namaFile = $_FILES["file_sertifikat"]["name"];
 $lokasiSementara = $_FILES["file_sertifikat"]["tmp_name"];
 
 $folderTujuan = "file-sertifikat/";
 $lokasiTujuan = $folderTujuan . $namaFile;
 
-/* path yang disimpan ke database */
+// lokasi yang disimpan
 $lokasiSimpanDatabase = "file-sertifikat/" . $namaFile;
 
 $terupload = move_uploaded_file($lokasiSementara, $lokasiTujuan);
@@ -39,7 +38,7 @@ if ($terupload) {
     exit();
   }
 
-  /* cek pengajuan harus selesai */
+  // cek status pengajuan
   $cek = mysqli_query($conn, "SELECT status_pengajuan FROM tbl_pengajuan_kalibrasi WHERE id_pengajuan='$idPengajuan' LIMIT 1");
   $dataCek = mysqli_fetch_assoc($cek);
   $statusPengajuan = $dataCek["status_pengajuan"] ?? "";

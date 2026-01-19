@@ -9,12 +9,11 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
-/* ambil pengajuan yang selesai */
 $sqlPengajuanSelesai = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,

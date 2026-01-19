@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_user'])) {
   exit();
 }
 
-if ($rolePengguna != 'admin' && $rolePengguna != 'cs' && $rolePengguna != 'admin_cs') {
+if ($rolePengguna != 'admin' && $rolePengguna != 'cs' && $rolePengguna != 'owner') {
   header("Location: ../login.php");
   exit();
 }
@@ -54,7 +54,7 @@ $totalPenawaran = 0;
 $totalPelanggan = 0;
 $totalSelesai = 0;
 
-/* Total pengajuan */
+// Total pengajuan
 $sqlTotalPengajuan = "
   SELECT COUNT(*) AS total
   FROM tbl_pengajuan_kalibrasi
@@ -65,7 +65,7 @@ if ($hasil) {
   $totalPengajuan = (int)($data['total'] ?? 0);
 }
 
-/* Total penawaran */
+// Total penawaran
 $sqlTotalPenawaran = "
   SELECT COUNT(*) AS total
   FROM tbl_penawaran
@@ -76,7 +76,7 @@ if ($hasil) {
   $totalPenawaran = (int)($data['total'] ?? 0);
 }
 
-/* Total pelanggan */
+// Total pelanggan
 $sqlTotalPelanggan = "
   SELECT COUNT(*) AS total
   FROM tbl_pelanggan
@@ -87,7 +87,7 @@ if ($hasil) {
   $totalPelanggan = (int)($data['total'] ?? 0);
 }
 
-/* Total pengajuan selesai */
+// Total pengajuan selesai
 $sqlTotalSelesai = "
   SELECT COUNT(*) AS total
   FROM tbl_pengajuan_kalibrasi

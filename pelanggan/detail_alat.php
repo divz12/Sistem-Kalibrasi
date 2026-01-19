@@ -35,7 +35,6 @@ if (!$pengajuan) {
   exit();
 }
 
-// ambil daftar alat dari tbl_pengajuan_alat
 $qAlat = mysqli_query($conn, "SELECT * FROM tbl_pengajuan_alat
                              WHERE id_pengajuan='$id_pengajuan'
                              ORDER BY id_alat DESC");

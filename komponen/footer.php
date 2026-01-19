@@ -52,13 +52,15 @@
       <div class="col-lg-4 col-md-6">
         <h4>Lokasi Kami</h4>
         <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7228804231922!2d107.00615337402817!3d-6.429635862873902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6997430692b039%3A0xdfc31d9f2d5be972!2sAkbar%20Karya%20kipas!5e0!3m2!1sen!2sid!4v1768839412562!5m2!1sen!2sid"
           frameborder="0"
           style="border:0; width:100%; height:220px;"
           allowfullscreen=""
           loading="lazy"
           referrerpolicy="no-referrer-when-downgrade">
         </iframe>
+
+        
       </div>
 
     </div>

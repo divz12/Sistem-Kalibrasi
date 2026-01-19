@@ -4,7 +4,7 @@ include "../../koneksi.php";
 
 $role = $_SESSION["role"] ?? "";
 if (!isset($_SESSION["id_user"])) { header("Location: ../../login.php"); exit(); }
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") { header("Location: ../../login.php"); exit(); }
+if ($role != "admin" && $role != "cs" && $role != "owner") { header("Location: ../../login.php"); exit(); }
 
 $id = (int)($_POST["id_sertifikat"] ?? 0);
 $nomor = $_POST["nomor_sertifikat"] ?? "";
@@ -16,13 +16,12 @@ if ($id <= 0) {
   exit();
 }
 
-/* ambil data lama */
 $q = mysqli_query($conn, "SELECT * FROM tbl_sertifikat WHERE id_sertifikat='$id' LIMIT 1");
 $lama = mysqli_fetch_assoc($q);
 $namaFileLama = $lama["nama_file_sertifikat"] ?? "";
 $lokasiFileLama = $lama["lokasi_file_sertifikat"] ?? "";
 
-/* upload baru kalau ada */
+
 $namaFileBaru = $_FILES["file_sertifikat"]["name"];
 $tmp = $_FILES["file_sertifikat"]["tmp_name"];
 

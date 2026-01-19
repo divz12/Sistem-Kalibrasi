@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,15 +20,12 @@ if ($idSertifikat <= 0) {
   exit();
 }
 
-/* ambil lokasi file dulu */
 $cek = mysqli_query($conn, "SELECT lokasi_file_sertifikat FROM tbl_sertifikat WHERE id_sertifikat='$idSertifikat' LIMIT 1");
 $data = mysqli_fetch_assoc($cek);
 $lokasiFile = $data["lokasi_file_sertifikat"] ?? "";
 
-/* hapus data */
 $hapus = mysqli_query($conn, "DELETE FROM tbl_sertifikat WHERE id_sertifikat='$idSertifikat'");
 
-/* hapus file fisik */
 if ($hapus) {
   if ($lokasiFile != "") {
     $path = "../../" . $lokasiFile;

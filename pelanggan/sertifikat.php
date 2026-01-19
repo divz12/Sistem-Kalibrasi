@@ -19,7 +19,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// ambil daftar pengajuan yang sudah selesai
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -45,7 +44,6 @@ $sql = "
 ";
 $data = mysqli_query($conn, $sql);
 
-// badge status
 function badgeStatus($status) {
   if ($status == 'selesai' || $status == 'Selesai' || $status == 'SELESAI') return 'bg-success';
   if ($status == 'diproses' || $status == 'Diproses' || $status == 'DIPROSES') return 'bg-warning text-dark';

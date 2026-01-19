@@ -9,12 +9,11 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
-/* ambil penawaran yang sudah diterima */
 $sqlPenawaran = "
   SELECT
     tbl_penawaran.id_penawaran,

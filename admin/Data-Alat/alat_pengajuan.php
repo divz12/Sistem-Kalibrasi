@@ -9,14 +9,14 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-/* Ambil semua alat pengajuan + info pengajuan + pelanggan */
+// ambil data alat beserta info pengajuan dan pelanggan
 $sql = "
   SELECT
     tbl_pengajuan_alat.id_alat,
@@ -53,7 +53,7 @@ if (!$hasil) {
   die("Query gagal: " . mysqli_error($conn));
 }
 
-/* Total alat */
+// hitung total alat
 $sqlTotal = "SELECT COUNT(*) AS total FROM tbl_pengajuan_alat";
 $hasilTotal = mysqli_query($conn, $sqlTotal);
 $dataTotal = mysqli_fetch_assoc($hasilTotal);
@@ -104,7 +104,7 @@ include "../komponen/navbar.php";
       </div>
     </div>
 
-    <!-- Tabel -->
+
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0">Daftar Alat</h5>

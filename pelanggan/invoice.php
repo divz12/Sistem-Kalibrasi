@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $id_user = (int)($_SESSION['id_user'] ?? 0);
 
-// ambil id_pelanggan
 $qPel = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
 $dataPel = mysqli_fetch_assoc($qPel);
 $id_pelanggan = (int)($dataPel['id_pelanggan'] ?? 0);
@@ -20,7 +19,7 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// ambil data pengajuan + penawaran
+
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,

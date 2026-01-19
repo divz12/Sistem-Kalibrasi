@@ -1,0 +1,110 @@
+/* =========================================================
+   RESPONSIVE FIX (SAFE) - target section saja
+   tidak override global container/img
+   ========================================================= */
+
+/* 1) FIX: padding ps-5 di Featured Services bikin sempit di HP */
+@media (max-width: 991.98px) {
+  #featured-services .row.gy-4.ps-5 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* 2) HERO: tombol jadi full di HP, kolom gambar center */
+@media (max-width: 991.98px) {
+  #hero h1 {
+    font-size: 26px;
+    line-height: 1.2;
+  }
+
+  #hero .btn {
+    width: 100%;
+    max-width: 100% !important; /* override inline max-width */
+    justify-content: center;
+  }
+
+  #hero .col-lg-6.col-md-10.text-end {
+    text-align: center !important;
+    margin-top: 18px;
+  }
+
+  #hero .hero-img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+@media (max-width: 575.98px) {
+  #hero h1 { font-size: 22px; }
+  #hero ul li span { font-size: 14px; }
+}
+
+/* 3) GALLERY: gambar tinggi fixed (180/200) bikin layout aneh di HP
+   - di HP kita bikin tinggi auto supaya ga kepotong/aneh
+*/
+@media (max-width: 575.98px) {
+  #features img[style*="height:180px"],
+  #features img[style*="height:200px"] {
+    height: auto !important;
+  }
+
+  #features .card {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+}
+
+/* 4) RUANG LINGKUP: jarak icon-box biar gak dempet */
+@media (max-width: 575.98px) {
+  #more-features .icon-box.d-flex {
+    gap: 10px;
+  }
+
+  #more-features .icon-box i {
+    font-size: 26px;
+    margin-top: 2px;
+  }
+}
+
+/* 5) CONTACT: card info biar gak kepotong */
+@media (max-width: 575.98px) {
+  #contact .info-item {
+    padding: 18px 12px;
+  }
+}
+
+/* 6) CLIENTS: logo jangan terlalu gede di HP */
+@media (max-width: 575.98px) {
+  #clients .client-logo img {
+    max-height: 40px;
+    width: auto;
+  }
+}
+
+/* HERO: di HP gambar di atas teks */
+@media (max-width: 991.98px) {
+  #hero .row.align-items-center {
+    display: flex;
+    flex-direction: column-reverse; /* balik urutan: gambar dulu, teks setelahnya */
+  }
+
+  /* rapihin spacing */
+  #hero .col-lg-6.col-md-10.text-end {
+    margin-bottom: 16px;
+    text-align: center !important;
+  }
+
+  #hero .col-lg-6.col-md-10[data-aos="fade-up"] {
+    text-align: left; /* teks tetap rapi */
+  }
+
+  /* gambar biar responsif */
+  #hero .hero-img {
+    width: 100%;
+    height: auto;
+    max-width: 520px; /* opsional biar gak kegedean */
+  }
+}

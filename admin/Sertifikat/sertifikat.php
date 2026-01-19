@@ -9,14 +9,13 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-/* list sertifikat */
 $sql = "
   SELECT
     tbl_sertifikat.id_sertifikat,
@@ -48,7 +47,7 @@ if (!$hasil) {
   die("Query gagal: " . mysqli_error($conn));
 }
 
-/* total sertifikat */
+// hitung total sertifikat
 $sqlTotal = "SELECT COUNT(*) AS total FROM tbl_sertifikat";
 $hasilTotal = mysqli_query($conn, $sqlTotal);
 $dataTotal = mysqli_fetch_assoc($hasilTotal);

@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password2 = $_POST['password2'] ?? '';
     $role      = $_POST['role'] ?? 'pelanggan';
 
-    // fungsi popup + balik
+    // fungsi popup alert dan kembali
     function alertBack($msg) {
         echo "<script>alert('$msg'); window.history.back();</script>";
         exit();

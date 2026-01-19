@@ -9,27 +9,23 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-/*
-  Filter sederhana (opsional):
-  - status_pengajuan: dikirim / diproses / selesai / ditolak
-  - status_penawaran: dikirim / diterima / ditolak / negosiasi
-*/
 $statusPengajuan = $_GET["status_pengajuan"] ?? "";
 $statusPenawaran = $_GET["status_penawaran"] ?? "";
 
-/* hitung statistik pengajuan */
+// hitung total pengajuan
 $sqlTotalPengajuan = "SELECT COUNT(*) AS total FROM tbl_pengajuan_kalibrasi";
 $hasilTotalPengajuan = mysqli_query($conn, $sqlTotalPengajuan);
 $dataTotalPengajuan = mysqli_fetch_assoc($hasilTotalPengajuan);
 $totalPengajuan = $dataTotalPengajuan["total"] ?? 0;
 
+// hitung total dikirim
 $sqlTotalDikirim = "
   SELECT COUNT(*) AS total
   FROM tbl_pengajuan_kalibrasi
@@ -39,6 +35,7 @@ $hasilTotalDikirim = mysqli_query($conn, $sqlTotalDikirim);
 $dataTotalDikirim = mysqli_fetch_assoc($hasilTotalDikirim);
 $totalDikirim = $dataTotalDikirim["total"] ?? 0;
 
+// hitung total diproses
 $sqlTotalDiproses = "
   SELECT COUNT(*) AS total
   FROM tbl_pengajuan_kalibrasi
@@ -48,6 +45,7 @@ $hasilTotalDiproses = mysqli_query($conn, $sqlTotalDiproses);
 $dataTotalDiproses = mysqli_fetch_assoc($hasilTotalDiproses);
 $totalDiproses = $dataTotalDiproses["total"] ?? 0;
 
+// hitung total selesai
 $sqlTotalSelesai = "
   SELECT COUNT(*) AS total
   FROM tbl_pengajuan_kalibrasi
@@ -57,7 +55,6 @@ $hasilTotalSelesai = mysqli_query($conn, $sqlTotalSelesai);
 $dataTotalSelesai = mysqli_fetch_assoc($hasilTotalSelesai);
 $totalSelesai = $dataTotalSelesai["total"] ?? 0;
 
-/* query daftar status proses */
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -122,10 +119,8 @@ function badgePenawaran($statusLower)
   return "bg-label-secondary";
 }
 
-/* tahap proses versi sederhana */
 function tahapProses($statusPengajuanLower, $statusPenawaranLower)
 {
-  // 1 Pengajuan Masuk, 2 Penawaran, 3 Proses Kalibrasi, 4 Dokumen
   $tahap = "Pengajuan Masuk";
 
   if ($statusPengajuanLower == "dikirim") {

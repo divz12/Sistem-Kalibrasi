@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $id_user = (int) $_SESSION['id_user'];
 
-// ambil id_pelanggan (tanpa prepare)
 $id_pelanggan = 0;
 $sqlPelanggan = "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user = '$id_user' LIMIT 1";
 $hasilP = mysqli_query($conn, $sqlPelanggan);

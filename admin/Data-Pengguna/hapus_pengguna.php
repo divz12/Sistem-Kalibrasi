@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "owner") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -46,7 +46,7 @@ if ($dataPel) {
   ";
   mysqli_query($conn, $sqlHapusPesan);
 
-  // ambil semua pengajuan
+  // hapus pengajuan kalibrasi beserta penawaran dan alat terkait
   $sqlPengajuan = "
     SELECT id_pengajuan
     FROM tbl_pengajuan_kalibrasi

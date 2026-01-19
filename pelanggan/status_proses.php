@@ -19,7 +19,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// ambil daftar pengajuan + status + penawaran
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -41,7 +40,7 @@ $sql = "
 ";
 $data = mysqli_query($conn, $sql);
 
-// fungsi badge status pengajuan
+// badge status pengajuan
 function badgeStatusPengajuan($status) {
   if ($status == 'dikirim' || $status == 'Dikirim' || $status == 'DIKIRIM') return 'bg-primary';
   if ($status == 'diproses' || $status == 'Diproses' || $status == 'DIPROSES') return 'bg-warning text-dark';
@@ -50,7 +49,7 @@ function badgeStatusPengajuan($status) {
   return 'bg-secondary';
 }
 
-// fungsi badge status penawaran
+// badge status penawaran
 function badgeStatusPenawaran($status) {
   if ($status == 'dikirim' || $status == 'Dikirim' || $status == 'DIKIRIM') return 'bg-primary';
   if ($status == 'diterima' || $status == 'Diterima' || $status == 'DITERIMA') return 'bg-success';

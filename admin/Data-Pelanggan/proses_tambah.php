@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -31,11 +31,13 @@ $password = $_POST["password"] ?? "";
 $no_hp    = $_POST["no_hp"] ?? "";
 $alamat   = $_POST["alamat"] ?? "";
 
+// validasi input
 if ($nama == "" || $email == "" || $password == "" || $no_hp == "" || $alamat == "") {
   header("Location: tambah_pelanggan.php?msg=err");
   exit();
 }
 
+// cek ada tanda petik atau tidak
 if (adaTandaPetik($nama) || adaTandaPetik($email) || adaTandaPetik($password) || adaTandaPetik($no_hp) || adaTandaPetik($alamat)) {
   header("Location: tambah_pelanggan.php?msg=err");
   exit();

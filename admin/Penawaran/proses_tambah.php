@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: penawaran.php?msg=err");
   exit();
 }
@@ -21,10 +21,7 @@ $tanggal_penawaran = $_POST["tanggal_penawaran"] ?? "";
 $total_biaya = (int)($_POST["total_biaya"] ?? 0);
 $rincian = $_POST["rincian"] ?? "";
 
-/*
-  IMPORTANT:
-  Saat admin buat penawaran, status otomatis "negosiasi"
-*/
+// default status penawaran
 $status_penawaran = "negosiasi";
 
 if ($id_pengajuan <= 0 || $id_admin <= 0) {
@@ -32,9 +29,6 @@ if ($id_pengajuan <= 0 || $id_admin <= 0) {
   exit();
 }
 
-/*
-  INSERT penawaran + wajib id_admin (karena FK fk_penawaran_admin)
-*/
 $sqlSimpan = "
   INSERT INTO tbl_penawaran
     (id_pengajuan, id_admin, tanggal_penawaran, total_biaya, rincian, status_penawaran, created_at)
@@ -47,14 +41,6 @@ if (!$simpan) {
   header("Location: penawaran.php?msg=err");
   exit();
 }
-
-/*
-  OPTIONAL:
-  Kalau kamu mau saat ada penawaran dibuat,
-  status pengajuan tetap "dikirim" (biar jelas masih tahap awal).
-  Tapi kalau kamu mau bisa juga ubah ke "dikirim" lagi.
-  Di sini aku biarkan tidak mengubah pengajuan.
-*/
 
 header("Location: penawaran.php?msg=ok");
 exit();

@@ -4,7 +4,7 @@ include "../../koneksi.php";
 
 $role = $_SESSION["role"] ?? "";
 if (!isset($_SESSION["id_user"])) { header("Location: ../../login.php"); exit(); }
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") { header("Location: ../../login.php"); exit(); }
+if ($role != "admin" && $role != "cs" && $role != "owner") { header("Location: ../../login.php"); exit(); }
 
 $id = (int)($_GET["id"] ?? 0);
 if ($id <= 0) { header("Location: sertifikat.php"); exit(); }

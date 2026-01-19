@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $id_user = (int)($_SESSION['id_user'] ?? 0);
 
-// ambil id_pelanggan
 $q1 = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
 $dataPelanggan = mysqli_fetch_assoc($q1);
 $id_pelanggan = (int)($dataPelanggan['id_pelanggan'] ?? 0);
@@ -20,7 +19,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// ambil daftar penawaran milik pelanggan
 $sql = "
   SELECT 
     tbl_penawaran.id_penawaran,
@@ -101,7 +99,6 @@ $penawaran = mysqli_query($conn, $sql);
               <?php $no = 1; while ($row = mysqli_fetch_assoc($penawaran)): ?>
 
                 <?php
-                  // badge status
                   $badge = "bg-secondary";
                   if ($row['status_penawaran'] == 'dikirim') $badge = "bg-primary";
                   if ($row['status_penawaran'] == 'diterima') $badge = "bg-success";

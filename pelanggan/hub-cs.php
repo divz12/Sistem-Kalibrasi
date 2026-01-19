@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $idUser = (int)($_SESSION['id_user'] ?? 0);
 
-// ambil id_pelanggan
 $idPelanggan = 0;
 $sqlPelanggan = "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user = '$idUser' LIMIT 1";
 $hasilPelanggan = mysqli_query($conn, $sqlPelanggan);
@@ -140,7 +139,6 @@ include 'komponen/navbar.php';
   </div>
 </div>
 
-<!-- auto scroll ke bawah setiap kali halaman dibuka -->
 <script>
   const chatBox = document.getElementById('chatBox');
   if (chatBox) chatBox.scrollTop = chatBox.scrollHeight;

@@ -22,7 +22,8 @@ if ($idPelanggan <= 0 || $kontak == '' || $pesan == '') {
 }
 
 // balasan otomatis
-$balasanOtomatis = "Terima kasih, pesan kamu sudah kami terima. Tim CS akan meninjau dan membantu secepatnya. Jika butuh respon cepat, kamu bisa hubungi WhatsApp CS.";
+$balasanOtomatis = "Terima kasih, pesan kamu sudah kami terima. Tim CS akan meninjau dan membantu secepatnya. 
+                    Jika butuh respon cepat, kamu bisa hubungi WhatsApp CS.";
 
 // simpan ke database
 $sql = "

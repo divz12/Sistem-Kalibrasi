@@ -40,7 +40,6 @@ if (!$pengajuan) {
   exit();
 }
 
-// ambil daftar alat berdasarkan id_pengajuan
 $qAlat = mysqli_query($conn, "
   SELECT *
   FROM tbl_pengajuan_alat
@@ -48,7 +47,7 @@ $qAlat = mysqli_query($conn, "
   ORDER BY id_alat DESC
 ");
 
-// untuk menampilkan badge status
+// untuk menampilkan status
 function badgeStatus($status) {
   $status = strtolower($status ?? '');
   if ($status == 'dikirim') return 'bg-label-primary';

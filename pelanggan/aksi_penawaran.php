@@ -22,7 +22,6 @@ if ($aksi != "diterima" && $aksi != "ditolak") {
   exit();
 }
 
-// ambil id_pelanggan
 $qPel = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
 $dataPel = mysqli_fetch_assoc($qPel);
 $id_pelanggan = (int)($dataPel['id_pelanggan'] ?? 0);
@@ -32,9 +31,7 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-/*
-  cek penawaran ini milik pelanggan tsb + ambil id_pengajuan untuk update status pengajuan
-*/
+// cek penawaran milik pelanggan yang login
 $sqlCek = "
   SELECT
     tbl_penawaran.id_penawaran,
@@ -58,17 +55,13 @@ if (!$data) {
 $statusSekarang = $data["status_penawaran"] ?? "";
 $id_pengajuan = (int)($data["id_pengajuan"] ?? 0);
 
-/*
-  aksi hanya boleh jika status masih dikirim / negosiasi
-*/
+
 if ($statusSekarang != "dikirim" && $statusSekarang != "negosiasi") {
   header("Location: penawaran.php?msg=err");
   exit();
 }
 
-/*
-  update status penawaran
-*/
+// update status penawaran
 $sqlUpdatePenawaran = "
   UPDATE tbl_penawaran
   SET status_penawaran = '$aksi'
@@ -81,9 +74,7 @@ if (!$updatePenawaran) {
   exit();
 }
 
-/*
-  kalau pelanggan TERIMA penawaran -> status pengajuan jadi diproses
-*/
+// jika diterima, update status pengajuan menjadi diproses
 if ($aksi == "diterima" && $id_pengajuan > 0) {
   $sqlUpdatePengajuan = "
     UPDATE tbl_pengajuan_kalibrasi

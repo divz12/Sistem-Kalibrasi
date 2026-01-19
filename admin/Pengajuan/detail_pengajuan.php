@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,7 +20,7 @@ if ($idPengajuan <= 0) {
   exit();
 }
 
-/* Ambil data pengajuan + pelanggan + user */
+
 $sqlPengajuan = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -51,7 +51,6 @@ if (!$dataPengajuan) {
   exit();
 }
 
-/* Ambil list alat dari tbl_pengajuan_alat */
 $sqlAlat = "
   SELECT
     tbl_pengajuan_alat.id_alat,
@@ -69,7 +68,7 @@ $sqlAlat = "
 ";
 $hasilAlat = mysqli_query($conn, $sqlAlat);
 
-/* Cek penawaran */
+// cek data penawaran terbaru
 $sqlPenawaran = "
   SELECT
     tbl_penawaran.id_penawaran,
@@ -111,13 +110,6 @@ include "../komponen/navbar.php";
         <i class="bx bx-arrow-back me-1"></i> Kembali
       </a>
     </div>
-
-    <?php if (($_GET["msg"] ?? "") == "ok"): ?>
-      <div class="alert alert-success">Status berhasil diubah ✅</div>
-    <?php endif; ?>
-    <?php if (($_GET["msg"] ?? "") == "err"): ?>
-      <div class="alert alert-danger">Gagal mengubah status ❌</div>
-    <?php endif; ?>
 
     <!-- Ringkasan -->
     <div class="card mb-3">

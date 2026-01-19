@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -21,7 +21,6 @@ if ($idInvoice <= 0) {
   exit();
 }
 
-/* Ambil data invoice */
 $sql = "
   SELECT *
   FROM tbl_invoice

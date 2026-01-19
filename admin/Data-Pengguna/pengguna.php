@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "owner") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -32,6 +32,7 @@ if (!$hasil) {
   die("Query gagal: " . mysqli_error($conn));
 }
 
+// hitung total pengguna
 $sqlTotal = "
   SELECT COUNT(*) AS total
   FROM tbl_users

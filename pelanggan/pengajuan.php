@@ -10,7 +10,6 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $id_user = (int)($_SESSION['id_user'] ?? 0);
 
-// ambil data pelanggan + user
 $sqlPelanggan = "
   SELECT 
     tbl_pelanggan.id_pelanggan, 

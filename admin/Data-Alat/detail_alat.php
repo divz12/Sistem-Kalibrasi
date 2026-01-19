@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,6 +20,7 @@ if ($idAlat <= 0) {
   exit();
 }
 
+// ambil data alat beserta info pengajuan dan pelanggan
 $sql = "
   SELECT
     tbl_pengajuan_alat.id_alat,

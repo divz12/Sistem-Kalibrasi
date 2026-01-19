@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,7 +20,6 @@ if ($idPengajuan <= 0) {
   exit();
 }
 
-/* ambil data pengajuan + penawaran + pelanggan + user */
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -61,7 +60,6 @@ if (!$data) {
   exit();
 }
 
-/* ambil data alat pada pengajuan */
 $sqlAlat = "
   SELECT
     tbl_pengajuan_alat.id_alat,
@@ -97,7 +95,7 @@ function badgePenawaran($statusLower)
   return "bg-label-secondary";
 }
 
-/* timeline sederhana */
+// menentukan tahap aktif
 function tahapAktif($statusPengajuanLower, $statusPenawaranLower)
 {
   $aktif = 1;

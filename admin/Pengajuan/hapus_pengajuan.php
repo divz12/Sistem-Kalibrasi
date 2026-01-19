@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,21 +20,21 @@ if ($idPengajuan <= 0) {
   exit();
 }
 
-/* Hapus penawaran */
+// hapus penawaran
 $sqlHapusPenawaran = "
   DELETE FROM tbl_penawaran
   WHERE id_pengajuan = '$idPengajuan'
 ";
 mysqli_query($conn, $sqlHapusPenawaran);
 
-/* Hapus alat */
+// hapus alat
 $sqlHapusAlat = "
   DELETE FROM tbl_pengajuan_alat
   WHERE id_pengajuan = '$idPengajuan'
 ";
 mysqli_query($conn, $sqlHapusAlat);
 
-/* Hapus pengajuan */
+// hapus pengajuan
 $sqlHapusPengajuan = "
   DELETE FROM tbl_pengajuan_kalibrasi
   WHERE id_pengajuan = '$idPengajuan'

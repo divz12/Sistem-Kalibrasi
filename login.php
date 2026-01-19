@@ -19,7 +19,7 @@
 
         <div class="position-relative" style="z-index:2;">
 
-          <!-- CARD -->
+          <!-- Card -->
           <div class="card border-0 shadow-lg rounded-4 text-center pt-5">
             <div class="card-body px-4 pb-4">
 
@@ -80,7 +80,6 @@
 
 
         </div>
-        <!-- /position-relative -->
 
       </div>
     </div>

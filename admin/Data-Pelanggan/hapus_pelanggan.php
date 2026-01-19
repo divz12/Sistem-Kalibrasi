@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -20,7 +20,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// cari id_user pelanggan
 $sqlCari = "
   SELECT id_user
   FROM tbl_pelanggan
@@ -43,7 +42,6 @@ $sqlHapusPesan = "
 ";
 mysqli_query($conn, $sqlHapusPesan);
 
-// ambil semua pengajuan pelanggan
 $sqlPengajuan = "
   SELECT id_pengajuan
   FROM tbl_pengajuan_kalibrasi

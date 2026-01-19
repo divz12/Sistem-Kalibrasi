@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "admin_cs") {
+if ($role != "admin" && $role != "cs" && $role != "owner") {
   header("Location: ../../login.php");
   exit();
 }
@@ -22,14 +22,14 @@ $totalTagihan = $_POST["total_tagihan"] ?? "0";
 $statusPembayaran = $_POST["status_pembayaran"] ?? "belum dibayar";
 $keteranganInvoice = $_POST["keterangan_invoice"] ?? "";
 
-/* upload file */
+// upload file invoice
 $namaFile = $_FILES["file_invoice"]["name"];
 $lokasiSementara = $_FILES["file_invoice"]["tmp_name"];
 
 $folderTujuan = "file-invoice/";
 $lokasiTujuan = $folderTujuan . $namaFile;
 
-/* yang disimpan ke db */
+// lokasi file yang disimpan
 $lokasiSimpanDatabase = "file-invoice/" . $namaFile;
 
 $terupload = move_uploaded_file($lokasiSementara, $lokasiTujuan);
@@ -41,7 +41,7 @@ if ($terupload) {
     exit();
   }
 
-  /* optional: cek penawaran harus diterima */
+ // cek status penawaran
   $cek = mysqli_query($conn, "SELECT status_penawaran FROM tbl_penawaran WHERE id_penawaran='$idPenawaran' LIMIT 1");
   $dataCek = mysqli_fetch_assoc($cek);
   $statusPenawaran = $dataCek["status_penawaran"] ?? "";
