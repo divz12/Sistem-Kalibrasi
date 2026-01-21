@@ -2,7 +2,7 @@
 session_start();
 include "../koneksi.php";
 
-// proteksi login
+// proteksi login pelanggan
 if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
   header("Location: ../login.php");
   exit();
@@ -10,15 +10,33 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
 
 $id_user = (int)($_SESSION['id_user'] ?? 0);
 
-$qPel = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
-$dataPel = mysqli_fetch_assoc($qPel);
-$id_pelanggan = (int)($dataPel['id_pelanggan'] ?? 0);
+$id_pelanggan = 0;
+$sqlPelanggan = "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1";
+$queryPelanggan = mysqli_query($conn, $sqlPelanggan);
+
+if ($queryPelanggan) {
+  $rowPel = mysqli_fetch_assoc($queryPelanggan);
+  $id_pelanggan = (int)($rowPel['id_pelanggan'] ?? 0);
+}
 
 if ($id_pelanggan <= 0) {
   header("Location: profil.php");
   exit();
 }
 
+function badgeStatus($status)
+{
+  $s = strtolower(trim($status ?? ''));
+
+  if ($s == 'selesai') return 'bg-success';
+  if ($s == 'diproses') return 'bg-warning text-dark';
+  if ($s == 'dikirim') return 'bg-primary';
+  if ($s == 'ditolak') return 'bg-danger';
+
+  return 'bg-secondary';
+}
+
+// ambil data sertifikat untuk pelanggan yang login
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -28,11 +46,21 @@ $sql = "
 
     tbl_penawaran.id_penawaran,
     tbl_penawaran.total_biaya,
-    tbl_penawaran.status_penawaran
+    tbl_penawaran.status_penawaran,
+
+    tbl_sertifikat.id_sertifikat,
+    tbl_sertifikat.nomor_sertifikat,
+    tbl_sertifikat.lokasi_file_sertifikat,
+    tbl_sertifikat.nama_file_sertifikat,
+    tbl_sertifikat.dibuat_pada
 
   FROM tbl_pengajuan_kalibrasi
+
   LEFT JOIN tbl_penawaran 
     ON tbl_penawaran.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
+
+  LEFT JOIN tbl_sertifikat
+    ON tbl_sertifikat.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
 
   WHERE tbl_pengajuan_kalibrasi.id_pelanggan = '$id_pelanggan'
     AND (
@@ -42,15 +70,8 @@ $sql = "
     )
   ORDER BY tbl_pengajuan_kalibrasi.tanggal_pengajuan DESC
 ";
-$data = mysqli_query($conn, $sql);
 
-function badgeStatus($status) {
-  if ($status == 'selesai' || $status == 'Selesai' || $status == 'SELESAI') return 'bg-success';
-  if ($status == 'diproses' || $status == 'Diproses' || $status == 'DIPROSES') return 'bg-warning text-dark';
-  if ($status == 'dikirim' || $status == 'Dikirim' || $status == 'DIKIRIM') return 'bg-primary';
-  if ($status == 'ditolak' || $status == 'Ditolak' || $status == 'DITOLAK') return 'bg-danger';
-  return 'bg-secondary';
-}
+$data = mysqli_query($conn, $sql);
 ?>
 
 <?php include 'komponen/header.php'; ?>
@@ -73,6 +94,13 @@ function badgeStatus($status) {
     <div class="alert alert-info">
       Sertifikat akan muncul di sini jika status pengajuan sudah <b>selesai</b>.
     </div>
+
+    <?php if (isset($_GET['msg']) && $_GET['msg'] == 'filenotfound'): ?>
+      <div class="alert alert-danger">
+        File sertifikat belum ditemukan di server. Silakan hubungi admin.
+      </div>
+    <?php endif; ?>
+
 
     <?php if (!$data || mysqli_num_rows($data) == 0): ?>
       <div class="card border-0 shadow-sm">
@@ -97,49 +125,87 @@ function badgeStatus($status) {
                 <tr>
                   <th>No</th>
                   <th>ID Pengajuan</th>
-                  <th>Tanggal</th>
+                  <th>Tanggal Pengajuan</th>
                   <th>Status</th>
-                  <th>Info</th>
+                  <th>Penawaran</th>
+                  <th>Sertifikat</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
+
                 <?php $no = 1; ?>
                 <?php while ($row = mysqli_fetch_assoc($data)): ?>
+
+                  <?php
+                  $statusPengajuan = $row['status_pengajuan'] ?? '-';
+                  $statusPenawaran = $row['status_penawaran'] ?? '-';
+                  $totalBiaya = $row['total_biaya'] ?? 0;
+
+                  $nomorSertifikat = $row['nomor_sertifikat'] ?? '-';
+                  $lokasiFile = $row['lokasi_file_sertifikat'] ?? '';
+                  $namaFile = $row['nama_file_sertifikat'] ?? '';
+                  ?>
+
                   <tr>
                     <td><?= $no++; ?></td>
-                    <td><span class="fw-semibold">#<?= $row['id_pengajuan']; ?></span></td>
-                    <td><?= $row['tanggal_pengajuan']; ?></td>
+
                     <td>
-                      <span class="badge <?= badgeStatus($row['status_pengajuan']); ?>">
-                        <?= $row['status_pengajuan']; ?>
+                      <span class="fw-semibold">#<?= $row['id_pengajuan']; ?></span>
+                    </td>
+
+                    <td><?= $row['tanggal_pengajuan'] ?? '-'; ?></td>
+
+                    <td>
+                      <span class="badge <?= badgeStatus($statusPengajuan); ?>">
+                        <?= $statusPengajuan; ?>
                       </span>
                     </td>
+
                     <td class="text-muted small">
                       <?php if (!empty($row['id_penawaran'])): ?>
-                        Penawaran: <?= $row['status_penawaran']; ?>
-                        <?php if (!empty($row['total_biaya'])): ?>
-                          <br>Total: Rp <?= number_format($row['total_biaya'], 0, ',', '.'); ?>
-                        <?php endif; ?>
+                        Status: <b><?= $statusPenawaran; ?></b>
+                        <br>
+                        Total: <b>Rp <?= number_format((float)$totalBiaya, 0, ',', '.'); ?></b>
                       <?php else: ?>
                         Penawaran: -
                       <?php endif; ?>
                     </td>
+
+                    <td class="text-muted small">
+                      <?php if (!empty($row['id_sertifikat'])): ?>
+                        No: <b><?= $nomorSertifikat; ?></b>
+                        <br>
+                        Tanggal: <?= $row['dibuat_pada'] ?? '-'; ?>
+                      <?php else: ?>
+                        Sertifikat: -
+                      <?php endif; ?>
+                    </td>
+
                     <td>
                       <div class="d-flex gap-2 flex-wrap">
+
                         <a class="btn btn-sm btn-primary"
                            href="detail_pengajuan.php?id=<?= $row['id_pengajuan']; ?>">
                           Detail
                         </a>
 
-                        <button type="button" class="btn btn-sm btn-outline-success" disabled
-                          title="Aktifkan jika sudah ada file sertifikat di database">
-                          Unduh Sertifikat
-                        </button>
+                        <?php if (!empty($row['id_pengajuan'])): ?>
+                          <a class="btn btn-sm btn-outline-success"
+                            href="unduh_sertifikat.php?id_pengajuan=<?= $row['id_pengajuan']; ?>">
+                            Unduh Sertifikat
+                          </a>
+                        <?php else: ?>
+                          <button type="button" class="btn btn-sm btn-outline-success" disabled>Unduh Sertifikat</button>
+                        <?php endif; ?>
+
+
                       </div>
                     </td>
                   </tr>
+
                 <?php endwhile; ?>
+
               </tbody>
             </table>
           </div>

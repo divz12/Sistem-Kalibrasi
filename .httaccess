@@ -1,0 +1,14 @@
+php_value date.timezone Asia/Jakarta
+php_value display_errors On
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Jangan proses jika file atau folder fisik benar-benar ada (misal css/js/images)
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Arahkan semua request lain ke index.php
+    RewriteRule ^(.+)$ index.php [QSA,L]
+</IfModule>

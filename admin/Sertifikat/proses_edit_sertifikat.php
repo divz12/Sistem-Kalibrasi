@@ -3,8 +3,15 @@ session_start();
 include "../../koneksi.php";
 
 $role = $_SESSION["role"] ?? "";
-if (!isset($_SESSION["id_user"])) { header("Location: ../../login.php"); exit(); }
-if ($role != "admin" && $role != "cs" && $role != "owner") { header("Location: ../../login.php"); exit(); }
+if (!isset($_SESSION["id_user"])) {
+   header("Location: ../../login.php"); 
+   exit(); 
+}
+
+if ($role != 'admin' && $role != 'cs') {
+  header("Location: ../../login.php");
+  exit();
+}
 
 $id = (int)($_POST["id_sertifikat"] ?? 0);
 $nomor = $_POST["nomor_sertifikat"] ?? "";

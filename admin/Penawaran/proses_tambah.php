@@ -9,7 +9,7 @@ if (!isset($_SESSION["id_user"])) {
   exit();
 }
 
-if ($role != "admin" && $role != "cs" && $role != "owner") {
+if ($role != "admin" && $role != "cs") {
   header("Location: penawaran.php?msg=err");
   exit();
 }

@@ -9,7 +9,7 @@ if (!isset($_SESSION['id_user'])) {
   exit();
 }
 
-if ($rolePengguna != 'admin' && $rolePengguna != 'cs' && $rolePengguna != 'owner') {
+if ($rolePengguna != 'admin' && $rolePengguna != 'cs') {
   header("Location: ../login.php");
   exit();
 }

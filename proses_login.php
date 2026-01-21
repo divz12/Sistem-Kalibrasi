@@ -24,9 +24,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if ($row['role'] == 'admin') {
                 header("Location: admin/index.php");
+            } elseif ($row['role'] == 'owner') {
+                header("Location: owner/index.php");
             } else {
                 header("Location: pelanggan/index.php");
             }
+
             exit();
 
         } else {
