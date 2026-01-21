@@ -31,7 +31,7 @@ $sql = "
     tanggal_penawaran = '$tanggal_penawaran',
     total_biaya = '$total_biaya',
     rincian = '$rincian',
-    status_penawaran = '$status_penawaran'
+    status_penawaran = 'negosiasi'
   WHERE id_penawaran = '$id_penawaran'
 ";
 $edit = mysqli_query($conn, $sql);

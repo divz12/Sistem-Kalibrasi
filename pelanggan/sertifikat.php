@@ -176,7 +176,6 @@ $data = mysqli_query($conn, $sql);
                       <?php if (!empty($row['id_sertifikat'])): ?>
                         No: <b><?= $nomorSertifikat; ?></b>
                         <br>
-                        Tanggal: <?= $row['dibuat_pada'] ?? '-'; ?>
                       <?php else: ?>
                         Sertifikat: -
                       <?php endif; ?>

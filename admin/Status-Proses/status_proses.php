@@ -296,7 +296,6 @@ include "../komponen/navbar.php";
 
                 echo "<td>
                         <a class='btn btn-sm btn-primary' href='status_detail.php?id=".$idPengajuan."'>Detail</a>
-                        <a class='btn btn-sm btn-outline-primary' href='../Penawaran/tambah_penawaran.php?id_pengajuan=".$idPengajuan."'>Buat Penawaran</a>
                       </td>";
 
                 echo "</tr>";

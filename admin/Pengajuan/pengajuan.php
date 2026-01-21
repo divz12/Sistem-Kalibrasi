@@ -190,12 +190,17 @@ include "../komponen/navbar.php";
                 echo "<td>".$jumlahAlat."</td>";
                 echo "<td>".($jumlahPenawaran > 0 ? "Ada" : "Belum")."</td>";
 
-                echo "<td>
-                        <a class='btn btn-sm btn-primary' href='detail_pengajuan.php?id=".$idPengajuan."'>Detail</a>
-                        <a class='btn btn-sm btn-outline-primary' href='../Penawaran/tambah_penawaran.php?id=".$idPengajuan."'>Buat Penawaran</a>
-                        <a class='btn btn-sm btn-danger' href='hapus_pengajuan.php?id=".$idPengajuan."'
-                           onclick=\"return confirm('Yakin hapus pengajuan ini?')\">Hapus</a>
-                      </td>";
+                $aksiBtn = "<a class='btn btn-sm btn-primary' href='detail_pengajuan.php?id=".$idPengajuan."'>Detail</a>";
+
+                if (strtolower($status) == "diproses") {
+                  $aksiBtn .= " <a class='btn btn-sm btn-outline-primary' href='../Penawaran/tambah_penawaran.php?id=".$idPengajuan."'>Buat Penawaran</a>";
+                }
+
+                /* $aksiBtn .= " <a class='btn btn-sm btn-danger' href='hapus_pengajuan.php?id=".$idPengajuan."'
+                           onclick=\"return confirm('Yakin hapus pengajuan ini?')\">Hapus</a>";
+                */
+
+                echo "<td>".$aksiBtn."</td>";
 
                 echo "</tr>";
                 $no++;

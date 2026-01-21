@@ -1,3 +1,7 @@
+
+<?php
+$root = "/Sistem-Kalibrasi/";
+?>
 <!-- Layout container -->
 <div class="layout-page">
     <!-- Navbar -->
@@ -79,7 +83,7 @@
                 <li><div class="dropdown-divider"></div></li>
 
                 <li>
-                    <a class="dropdown-item" href="../logout.php" onclick="return confirm('Yakin ingin logout?');">
+                    <a class="dropdown-item" href="<?= $root; ?>logout.php" onclick="return confirm('Yakin ingin logout?');">
                     <i class="bx bx-power-off me-2"></i>
                     <span class="align-middle">Logout</span>
                     </a>

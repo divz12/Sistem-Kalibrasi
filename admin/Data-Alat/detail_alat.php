@@ -169,7 +169,6 @@ include "../komponen/navbar.php";
         <hr class="my-3">
 
         <div class="d-flex gap-2">
-          <a href="edit_alat.php?id=<?= $data["id_alat"]; ?>" class="btn btn-primary">Edit</a>
           <a href="../Pengajuan/detail_pengajuan.php?id=<?= $data["id_pengajuan"]; ?>" class="btn btn-outline-primary">
             Lihat Pengajuan
           </a>

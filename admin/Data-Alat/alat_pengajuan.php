@@ -151,9 +151,6 @@ include "../komponen/navbar.php";
                 echo "<td><span class='badge ".badgeStatus($statusPengajuan)."'>".$statusPengajuan."</span></td>";
                 echo "<td>
                         <a class='btn btn-sm btn-primary' href='detail_alat.php?id=".$idAlat."'>Detail</a>
-                        <a class='btn btn-sm btn-outline-primary' href='edit_alat.php?id=".$idAlat."'>Edit</a>
-                        <a class='btn btn-sm btn-danger' href='hapus_alat.php?id=".$idAlat."'
-                           onclick=\"return confirm('Yakin hapus data alat ini?')\">Hapus</a>
                       </td>";
                 echo "</tr>";
 

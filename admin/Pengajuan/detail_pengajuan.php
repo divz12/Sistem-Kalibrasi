@@ -20,7 +20,6 @@ if ($idPengajuan <= 0) {
   exit();
 }
 
-
 $sqlPengajuan = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -92,6 +91,12 @@ function badgeStatus($status)
   return "bg-label-secondary";
 }
 
+// =========================
+// KUNCI STATUS JIKA SELESAI
+// =========================
+$statusLower = strtolower($dataPengajuan["status_pengajuan"] ?? "");
+$kunciStatus = ($statusLower == "selesai");
+
 $base = "../../";
 include "../komponen/header.php";
 include "../komponen/sidebar.php";
@@ -155,9 +160,6 @@ include "../komponen/navbar.php";
         <hr>
 
         <div class="d-flex gap-2 flex-wrap">
-          <a class="btn btn-primary" href="../Penawaran/tambah_penawaran.php?id=<?= $idPengajuan; ?>">
-            Buat Penawaran
-          </a>
           <?php if ($dataPenawaran): ?>
             <a class="btn btn-outline-primary" href="../penawaran_detail.php?id=<?= $dataPenawaran["id_penawaran"]; ?>">
               Lihat Penawaran
@@ -175,13 +177,25 @@ include "../komponen/navbar.php";
         <h5 class="mb-0">Ubah Status Pengajuan</h5>
       </div>
       <div class="card-body">
+
+        <?php if ($kunciStatus): ?>
+          <div class="alert alert-info">
+            Status pengajuan sudah <b>selesai</b>, jadi <b>tidak bisa diubah</b>.
+          </div>
+        <?php endif; ?>
+
         <form action="proses_update_status.php" method="post">
           <input type="hidden" name="id_pengajuan" value="<?= $idPengajuan; ?>">
+
+          <?php if ($kunciStatus): ?>
+            <!-- supaya nilai status tetap terkirim walau select disabled -->
+            <input type="hidden" name="status_pengajuan" value="selesai">
+          <?php endif; ?>
 
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Status Pengajuan</label>
-              <select name="status_pengajuan" class="form-control" required>
+              <select name="status_pengajuan" class="form-control" required <?= $kunciStatus ? "disabled" : ""; ?>>
                 <option value="">-- Pilih Status --</option>
                 <option value="dikirim" <?= ($dataPengajuan["status_pengajuan"] == "dikirim") ? "selected" : ""; ?>>dikirim</option>
                 <option value="diproses" <?= ($dataPengajuan["status_pengajuan"] == "diproses") ? "selected" : ""; ?>>diproses</option>
@@ -191,9 +205,15 @@ include "../komponen/navbar.php";
             </div>
 
             <div class="col-md-6 d-flex align-items-end">
-              <button class="btn btn-primary" type="submit">
-                <i class="bx bx-save me-1"></i> Simpan Status
-              </button>
+              <?php if (!$kunciStatus): ?>
+                <button class="btn btn-primary" type="submit">
+                  <i class="bx bx-save me-1"></i> Simpan Status
+                </button>
+              <?php else: ?>
+                <button class="btn btn-secondary" type="button" disabled>
+                  <i class="bx bx-lock me-1"></i> Status Terkunci
+                </button>
+              <?php endif; ?>
             </div>
           </div>
         </form>

@@ -134,8 +134,8 @@ include "../komponen/navbar.php";
         <hr class="my-4">
 
         <div class="d-flex gap-2">
-          <a href="edit_penawaran.php?id=<?= $data["id_penawaran"]; ?>" class="btn btn-primary">Edit</a>
-          <a href="../Pengajuan/pengajuan_detail.php?id=<?= $data["id_pengajuan"]; ?>" class="btn btn-outline-primary">
+          
+          <a href="../Pengajuan/detail_pengajuan.php?id=<?= $data["id_pengajuan"]; ?>" class="btn btn-outline-primary">
             Lihat Pengajuan
           </a>
         </div>

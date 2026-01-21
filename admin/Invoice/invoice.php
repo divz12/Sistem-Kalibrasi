@@ -155,7 +155,14 @@ include "../komponen/navbar.php";
                 echo "<td><span class='badge ".badgePembayaran($statusBayar)."'>".$statusBayar."</span></td>";
 
                 if ($lokasiFile != "") {
-                  echo "<td><a class='btn btn-sm btn-outline-success' href='".$lokasiFile."' target='_blank'>Unduh</a></td>";
+                  
+                echo "<td>
+                    <a class='btn btn-sm btn-outline-success' href='unduh_invoice.php?id_invoice=".$idInvoice."'>
+                      Unduh
+                    </a>
+                  </td>";
+
+
                 } else {
                   echo "<td>-</td>";
                 }

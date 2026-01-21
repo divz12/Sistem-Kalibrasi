@@ -86,16 +86,6 @@ include "../komponen/navbar.php";
           <textarea name="rincian" class="form-control" rows="4" required><?= $data["rincian"]; ?></textarea>
         </div>
 
-        <div class="mt-3">
-          <label class="form-label">Status Penawaran</label>
-          <select name="status_penawaran" class="form-control" required>
-            <option value="dikirim" <?= ($data["status_penawaran"] == "dikirim") ? "selected" : ""; ?>>dikirim</option>
-            <option value="negosiasi" <?= ($data["status_penawaran"] == "negosiasi") ? "selected" : ""; ?>>negosiasi</option>
-            <option value="diterima" <?= ($data["status_penawaran"] == "diterima") ? "selected" : ""; ?>>diterima</option>
-            <option value="ditolak" <?= ($data["status_penawaran"] == "ditolak") ? "selected" : ""; ?>>ditolak</option>
-          </select>
-        </div>
-
         <hr class="my-4">
 
         <button class="btn btn-primary" type="submit">Simpan</button>

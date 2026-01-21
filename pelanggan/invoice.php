@@ -34,7 +34,6 @@ function kolomAda($conn, $namaTabel, $namaKolom)
   return ((int)($r['total'] ?? 0) > 0);
 }
 
-
 $invoicePunyaIdPengajuan = kolomAda($conn, "tbl_invoice", "id_pengajuan");
 $invoicePunyaIdPenawaran = kolomAda($conn, "tbl_invoice", "id_penawaran");
 
@@ -57,7 +56,12 @@ if ($invoicePunyaIdPengajuan || $invoicePunyaIdPenawaran) {
   $namaFileSelect = ($kolomNamaFile != "") ? "tbl_invoice.$kolomNamaFile AS nama_file_invoice" : "NULL AS nama_file_invoice";
   $lokFileSelect  = ($kolomLokasiFile != "") ? "tbl_invoice.$kolomLokasiFile AS lokasi_file_invoice" : "NULL AS lokasi_file_invoice";
 
+  // ============================
+  // ✅ PERUBAHAN YANG DIPERLUKAN:
+  // Tambahkan id_invoice biar tombol unduh bisa pakai id_invoice
+  // ============================
   $selectInvoice = "
+    tbl_invoice.id_invoice,
     tbl_invoice.nomor_invoice,
     tbl_invoice.status_pembayaran,
     tbl_invoice.total_tagihan,
@@ -66,22 +70,27 @@ if ($invoicePunyaIdPengajuan || $invoicePunyaIdPenawaran) {
     $lokFileSelect
   ";
 
-  if ($invoicePunyaIdPengajuan) {
-    $joinInvoice = "
-      LEFT JOIN tbl_invoice
-        ON tbl_invoice.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
-    ";
-  } else {
-    // invoice pakai id_penawaran
+  // ============================
+  // ✅ PERUBAHAN YANG DIPERLUKAN:
+  // Join invoice lewat id_penawaran (sesuai invoice dibuat setelah penawaran diterima)
+  // ============================
+  if ($invoicePunyaIdPenawaran) {
     $joinInvoice = "
       LEFT JOIN tbl_invoice
         ON tbl_invoice.id_penawaran = tbl_penawaran.id_penawaran
+    ";
+  } else {
+    // fallback kalau DB kamu ternyata masih pakai id_pengajuan
+    $joinInvoice = "
+      LEFT JOIN tbl_invoice
+        ON tbl_invoice.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
     ";
   }
 
 } else {
 
   $selectInvoice = "
+    NULL AS id_invoice,
     NULL AS nomor_invoice,
     NULL AS status_pembayaran,
     NULL AS total_tagihan,
@@ -120,8 +129,7 @@ $sql = "
 
 $data = mysqli_query($conn, $sql);
 
-function badgeStatus($status)
-{
+function badgeStatus($status) {
   $s = strtolower($status ?? '');
   if ($s == 'selesai') return 'bg-success';
   if ($s == 'diproses') return 'bg-warning text-dark';
@@ -130,20 +138,18 @@ function badgeStatus($status)
   return 'bg-secondary';
 }
 
-function badgeInvoice($statusBayar, $nomorInvoice)
-{
-  $s = strtolower($statusBayar ?? '');
-  $nomor = $nomorInvoice ?? '';
+// ============================
+// ✅ PERUBAHAN YANG DIPERLUKAN:
+// Status invoice berdasar ADA/TIDAK invoice + status_pembayaran
+// (bukan lagi status_pengajuan selesai)
+// ============================
+function statusInvoiceDariData($id_invoice, $status_pembayaran) {
+  $id = (int)($id_invoice ?? 0);
+  if ($id <= 0) return ['Belum tersedia', 'bg-secondary'];
 
-  // kalau belum ada nomor invoice -> belum tersedia
-  if ($nomor == '' || $nomor == null) {
-    return ['Belum tersedia', 'bg-secondary'];
-  }
-
-  if ($s == 'lunas' || $s == 'dibayar') return ['Lunas', 'bg-success'];
-  if ($s == 'belum dibayar' || $s == 'pending' || $s == 'unpaid') return ['Belum dibayar', 'bg-warning text-dark'];
-
-  return [$statusBayar, 'bg-secondary'];
+  $s = strtolower(trim((string)($status_pembayaran ?? '')));
+  if ($s == 'sudah dibayar' || $s == 'dibayar' || $s == 'paid') return ['Sudah dibayar', 'bg-success'];
+  return ['Belum dibayar', 'bg-warning text-dark'];
 }
 ?>
 
@@ -164,8 +170,12 @@ function badgeInvoice($statusBayar, $nomorInvoice)
       </a>
     </div>
 
+    <!-- ============================
+         ✅ PERUBAHAN YANG DIPERLUKAN:
+         Info invoice tersedia jika penawaran diterima & invoice sudah dibuat
+    ============================ -->
     <div class="alert alert-info">
-      Tombol <b>Unduh Invoice</b> akan aktif jika file invoice sudah diupload oleh admin.
+      Invoice akan <b>tersedia</b> setelah penawaran <b>diterima</b> (invoice dibuat otomatis oleh sistem).
     </div>
 
     <?php if (!$data || mysqli_num_rows($data) == 0): ?>
@@ -193,68 +203,64 @@ function badgeInvoice($statusBayar, $nomorInvoice)
                   <th>ID Pengajuan</th>
                   <th>Tanggal Pengajuan</th>
                   <th>Status Pengajuan</th>
-                  <th>Total Biaya (Penawaran)</th>
-                  <th>Invoice</th>
+                  <th>Total Biaya</th>
+                  <th>Status Invoice</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
-
                 <?php $no = 1; ?>
                 <?php while ($row = mysqli_fetch_assoc($data)): ?>
                   <?php
-                    $totalBiaya = (float)($row['total_biaya'] ?? 0);
+                    $total = (float)($row['total_biaya'] ?? 0);
 
-                    $nomorInvoice = $row['nomor_invoice'] ?? '';
-                    $statusBayar  = $row['status_pembayaran'] ?? '';
-                    $lokInvoice   = $row['lokasi_file_invoice'] ?? '';
+                    // ============================
+                    // ✅ PERUBAHAN YANG DIPERLUKAN:
+                    // ambil id_invoice & status_pembayaran
+                    // ============================
+                    $idInvoice = (int)($row['id_invoice'] ?? 0);
+                    $statusBayar = $row['status_pembayaran'] ?? '';
 
-                    $infoInv = badgeInvoice($statusBayar, $nomorInvoice);
+                    $infoInv = statusInvoiceDariData($idInvoice, $statusBayar);
                     $labelInv = $infoInv[0];
                     $badgeInv = $infoInv[1];
 
-                    $bisaUnduh = ($lokInvoice != '' && $lokInvoice != null);
+                    // tombol unduh aktif kalau invoice ada
+                    $bisaUnduh = ($idInvoice > 0);
                   ?>
-
                   <tr>
                     <td><?= $no++; ?></td>
-
-                    <td>
-                      <span class="fw-semibold">#<?= $row['id_pengajuan']; ?></span>
-                    </td>
-
+                    <td><span class="fw-semibold">#<?= $row['id_pengajuan']; ?></span></td>
                     <td><?= $row['tanggal_pengajuan']; ?></td>
-
                     <td>
                       <span class="badge <?= badgeStatus($row['status_pengajuan']); ?>">
                         <?= $row['status_pengajuan']; ?>
                       </span>
                     </td>
-
                     <td>
-                      <?php if ($totalBiaya > 0): ?>
-                        Rp <?= number_format($totalBiaya, 0, ',', '.'); ?>
+                      <?php if ($total > 0): ?>
+                        Rp <?= number_format($total, 0, ',', '.'); ?>
                       <?php else: ?>
                         <span class="text-muted">-</span>
                       <?php endif; ?>
                     </td>
-
                     <td>
                       <span class="badge <?= $badgeInv; ?>"><?= $labelInv; ?></span>
-                      <?php if ($nomorInvoice != ''): ?>
-                        <div class="text-muted small">No: <?= $nomorInvoice; ?></div>
-                      <?php endif; ?>
                     </td>
-
                     <td>
                       <div class="d-flex gap-2 flex-wrap">
-                        <a class="btn btn-sm btn-primary" href="detail_pengajuan.php?id=<?= $row['id_pengajuan']; ?>">
+                        <a class="btn btn-sm btn-primary"
+                           href="detail_pengajuan.php?id=<?= $row['id_pengajuan']; ?>">
                           Detail
                         </a>
 
                         <?php if ($bisaUnduh): ?>
+                          <!-- ============================
+                               ✅ PERUBAHAN YANG DIPERLUKAN:
+                               Unduh pakai id_invoice (sesuai unduh_invoice.php)
+                          ============================ -->
                           <a class="btn btn-sm btn-outline-success"
-                             href="unduh_invoice.php?id_pengajuan=<?= $row['id_pengajuan']; ?>">
+                             href="unduh_invoice.php?id_invoice=<?= $idInvoice; ?>">
                             Unduh Invoice
                           </a>
                         <?php else: ?>
@@ -262,12 +268,11 @@ function badgeInvoice($statusBayar, $nomorInvoice)
                             Unduh Invoice
                           </button>
                         <?php endif; ?>
+
                       </div>
                     </td>
                   </tr>
-
                 <?php endwhile; ?>
-
               </tbody>
             </table>
           </div>

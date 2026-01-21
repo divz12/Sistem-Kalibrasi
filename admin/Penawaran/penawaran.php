@@ -16,6 +16,34 @@ if ($role != "admin" && $role != "cs") {
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
+$urut = $_GET["urut"] ?? "status"; // default: urut berdasarkan status
+
+// default order by (status)
+$orderBySql = "
+  ORDER BY 
+    CASE 
+      WHEN tbl_penawaran.status_penawaran = 'negosiasi' THEN 1
+      WHEN tbl_penawaran.status_penawaran = 'dikirim' THEN 2
+      WHEN tbl_penawaran.status_penawaran = 'diterima' THEN 3
+      WHEN tbl_penawaran.status_penawaran = 'ditolak' THEN 4
+      ELSE 5
+    END ASC,
+    tbl_penawaran.id_penawaran DESC
+";
+
+// kalau user pilih urutan lain
+if ($urut == "terbaru") {
+  $orderBySql = "ORDER BY tbl_penawaran.id_penawaran DESC";
+} elseif ($urut == "terlama") {
+  $orderBySql = "ORDER BY tbl_penawaran.id_penawaran ASC";
+} elseif ($urut == "biaya_tertinggi") {
+  $orderBySql = "ORDER BY tbl_penawaran.total_biaya DESC, tbl_penawaran.id_penawaran DESC";
+} elseif ($urut == "biaya_terendah") {
+  $orderBySql = "ORDER BY tbl_penawaran.total_biaya ASC, tbl_penawaran.id_penawaran DESC";
+} else {
+  // tetap status (default)
+}
+
 $sql = "
   SELECT
     tbl_penawaran.id_penawaran,
@@ -34,7 +62,12 @@ $sql = "
     tbl_pelanggan.alamat,
 
     tbl_users.nama,
-    tbl_users.email
+    tbl_users.email,
+
+    /* ===== TAMBAHAN YANG DIPERLUKAN: ambil data invoice by id_penawaran ===== */
+    tbl_invoice.id_invoice,
+    tbl_invoice.status_pembayaran,
+    tbl_invoice.nomor_invoice
 
   FROM tbl_penawaran
   LEFT JOIN tbl_pengajuan_kalibrasi
@@ -43,7 +76,12 @@ $sql = "
     ON tbl_pelanggan.id_pelanggan = tbl_pengajuan_kalibrasi.id_pelanggan
   LEFT JOIN tbl_users
     ON tbl_users.id_user = tbl_pelanggan.id_user
-  ORDER BY tbl_penawaran.id_penawaran DESC
+
+  /* ===== TAMBAHAN: join invoice pakai id_penawaran ===== */
+  LEFT JOIN tbl_invoice
+    ON tbl_invoice.id_penawaran = tbl_penawaran.id_penawaran
+
+  $orderBySql
 ";
 $hasil = mysqli_query($conn, $sql);
 if (!$hasil) {
@@ -62,6 +100,14 @@ function badgeStatusPenawaran($status)
   if ($status == "diterima") return "bg-label-success";
   if ($status == "ditolak") return "bg-label-danger";
   if ($status == "negosiasi") return "bg-label-warning";
+  return "bg-label-secondary";
+}
+
+function badgeStatusBayar($status)
+{
+  $s = strtolower((string)$status);
+  if ($s == "sudah dibayar" || $s == "dibayar" || $s == "paid") return "bg-label-success";
+  if ($s == "belum dibayar" || $s == "unpaid") return "bg-label-warning";
   return "bg-label-secondary";
 }
 
@@ -107,8 +153,21 @@ include "../komponen/navbar.php";
     </div>
 
     <div class="card">
-      <div class="card-header">
+      <div class="card-header d-flex flex-wrap gap-3 justify-content-between align-items-center">
         <h5 class="mb-0">Daftar Penawaran</h5>
+
+        <!-- FITUR URUTKAN -->
+        <form method="get" class="d-flex align-items-center gap-2">
+          <label class="text-muted small mb-0">Urutkan:</label>
+          <select name="urut" class="form-select form-select-sm" style="width:220px;" onchange="this.form.submit()">
+            <option value="status" <?= ($urut == "status") ? "selected" : ""; ?>>Berdasarkan Status</option>
+            <option value="terbaru" <?= ($urut == "terbaru") ? "selected" : ""; ?>>Terbaru</option>
+            <option value="terlama" <?= ($urut == "terlama") ? "selected" : ""; ?>>Terlama</option>
+            <option value="biaya_tertinggi" <?= ($urut == "biaya_tertinggi") ? "selected" : ""; ?>>Total Biaya Tertinggi</option>
+            <option value="biaya_terendah" <?= ($urut == "biaya_terendah") ? "selected" : ""; ?>>Total Biaya Terendah</option>
+          </select>
+          <noscript><button class="btn btn-sm btn-primary" type="submit">Terapkan</button></noscript>
+        </form>
       </div>
 
       <div class="table-responsive">
@@ -122,6 +181,8 @@ include "../komponen/navbar.php";
               <th>Tanggal Penawaran</th>
               <th>Total Biaya</th>
               <th>Status Penawaran</th>
+              <th>Status Invoice</th>
+
               <th style="width:240px;">Aksi</th>
             </tr>
           </thead>
@@ -130,7 +191,7 @@ include "../komponen/navbar.php";
             $no = 1;
 
             if (mysqli_num_rows($hasil) == 0) {
-              echo "<tr><td colspan='8' class='text-center'>Belum ada penawaran.</td></tr>";
+              echo "<tr><td colspan='9' class='text-center'>Belum ada penawaran.</td></tr>";
             } else {
               while ($row = mysqli_fetch_assoc($hasil)) {
 
@@ -142,6 +203,41 @@ include "../komponen/navbar.php";
                 $totalBiaya = $row["total_biaya"] ?? 0;
                 $statusPenawaran = $row["status_penawaran"] ?? "-";
 
+                $idInvoice = (int)($row["id_invoice"] ?? 0);
+                $statusBayar = $row["status_pembayaran"] ?? "";
+                $statusBayarLower = strtolower((string)$statusBayar);
+
+                // tampil badge invoice
+                if ($idInvoice > 0) {
+                  $labelInv = ($statusBayar != "") ? $statusBayar : "belum dibayar";
+                  $badgeInv = badgeStatusBayar($labelInv);
+                  $kolomInvoiceHtml = "<span class='badge $badgeInv'>$labelInv</span>";
+                } else {
+                  $kolomInvoiceHtml = "<span class='badge bg-label-secondary'>belum tersedia</span>";
+                }
+
+                $statusLower = strtolower($statusPenawaran);
+
+                // default edit muncul
+                $btnEdit = "<a class='btn btn-sm btn-outline-primary' href='edit_penawaran.php?id=".$idPenawaran."'>Edit</a>";
+
+                // diterima -> hilangkan edit
+                if ($statusLower == "diterima") {
+                  $btnEdit = "";
+                }
+
+                // ditolak -> tawar kembali
+                if ($statusLower == "ditolak") {
+                  $btnEdit = "<a class='btn btn-sm btn-outline-warning' href='edit_penawaran.php?id=".$idPenawaran."'>Tawar Kembali</a>";
+                }
+
+                
+                $btnKonfirmasi = "";
+                if ($statusLower == "diterima" && $idInvoice > 0 && ($statusBayarLower == "belum dibayar" || $statusBayarLower == "unpaid" || $statusBayarLower == "")) {
+                  $btnKonfirmasi = "<a class='btn btn-sm btn-success' href='konfirmasi_bayar.php?id_invoice=".$idInvoice."'
+                    onclick=\"return confirm('Konfirmasi pembayaran untuk invoice ini?');\">Konfirmasi Bayar</a>";
+                }
+
                 echo "<tr>";
                 echo "<td>$no</td>";
                 echo "<td>$idPenawaran</td>";
@@ -150,11 +246,14 @@ include "../komponen/navbar.php";
                 echo "<td>".$tanggalPenawaran."</td>";
                 echo "<td>Rp ".number_format($totalBiaya, 0, ',', '.')."</td>";
                 echo "<td><span class='badge ".badgeStatusPenawaran($statusPenawaran)."'>".$statusPenawaran."</span></td>";
+
+                // tampil status invoice
+                echo "<td>".$kolomInvoiceHtml."</td>";
+
                 echo "<td>
                         <a class='btn btn-sm btn-primary' href='detail_penawaran.php?id=".$idPenawaran."'>Detail</a>
-                        <a class='btn btn-sm btn-outline-primary' href='edit_penawaran.php?id=".$idPenawaran."'>Edit</a>
-                        <a class='btn btn-sm btn-danger' href='hapus_penawaran.php?id=".$idPenawaran."'
-                           onclick=\"return confirm('Yakin hapus penawaran ini?')\">Hapus</a>
+                        ".$btnEdit."
+                        ".$btnKonfirmasi."
                       </td>";
                 echo "</tr>";
 

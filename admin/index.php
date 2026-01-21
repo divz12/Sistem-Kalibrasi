@@ -163,10 +163,10 @@ include "komponen/navbar.php";
       </div>
 
       <div class="d-flex gap-2">
-        <a href="data_pengajuan.php" class="btn btn-primary">
+        <a href="Pengajuan/pengajuan.php" class="btn btn-primary">
           <i class="bx bx-list-check me-1"></i> Data Pengajuan
         </a>
-        <a href="data_pelanggan.php" class="btn btn-outline-primary">
+        <a href="Data-Pelanggan/pelanggan.php" class="btn btn-outline-primary">
           <i class="bx bx-user me-1"></i> Data Pelanggan
         </a>
       </div>
@@ -237,7 +237,7 @@ include "komponen/navbar.php";
         <div class="card h-100">
           <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">Pengajuan Terbaru</h5>
-            <a href="data_pengajuan.php" class="btn btn-sm btn-outline-primary">Lihat semua</a>
+            <a href="Pengajuan/pengajuan.php" class="btn btn-sm btn-outline-primary">Lihat semua</a>
           </div>
 
           <div class="card-body">
@@ -269,12 +269,12 @@ include "komponen/navbar.php";
                 <a href="detail_pengajuan.php?id=<?= (int)$pengajuanTerbaru['id_pengajuan']; ?>" class="btn btn-primary">
                   Detail Pengajuan
                 </a>
-                <a href="buat_penawaran.php?id=<?= (int)$pengajuanTerbaru['id_pengajuan']; ?>" class="btn btn-outline-primary">
+                <!-- <a href="buat_penawaran.php?id=<?= (int)$pengajuanTerbaru['id_pengajuan']; ?>" class="btn btn-outline-primary">
                   Buat Penawaran
                 </a>
                 <a href="ubah_status_pengajuan.php?id=<?= (int)$pengajuanTerbaru['id_pengajuan']; ?>" class="btn btn-outline-primary">
                   Ubah Status
-                </a>
+                </a> -->
               </div>
             <?php endif; ?>
           </div>
@@ -326,7 +326,7 @@ include "komponen/navbar.php";
     <div class="card">
       <div class="card-header d-flex align-items-center justify-content-between">
         <h5 class="mb-0">Riwayat Pengajuan Terbaru</h5>
-        <a href="data_pengajuan.php" class="btn btn-sm btn-outline-primary">Lihat semua</a>
+        <a href="Pengajuan/pengajuan.php" class="btn btn-sm btn-outline-primary">Lihat semua</a>
       </div>
 
       <div class="table-responsive">
@@ -360,7 +360,7 @@ include "komponen/navbar.php";
                   <td><?= $row['catatan'] ?? '-'; ?></td>
                   <td>
                     <a class="btn btn-sm btn-primary"
-                       href="detail_pengajuan.php?id=<?= (int)$row['id_pengajuan']; ?>">
+                       href="Pengajuan/detail_pengajuan.php?id=<?= (int)$row['id_pengajuan']; ?>">
                       Detail
                     </a>
                   </td>

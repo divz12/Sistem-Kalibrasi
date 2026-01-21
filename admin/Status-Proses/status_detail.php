@@ -215,9 +215,12 @@ include "../komponen/navbar.php";
             Lihat Detail Pengajuan
           </a>
 
+        <!--         
           <a class="btn btn-outline-primary" href="../Penawaran/tambah_penawaran.php?id_pengajuan=<?= $data["id_pengajuan"]; ?>">
             Buat Penawaran
           </a>
+         -->
+
 
           <?php if (($data["id_penawaran"] ?? "") != ""): ?>
             <a class="btn btn-outline-primary" href="../Penawaran/detail_penawaran.php?id=<?= $data["id_penawaran"]; ?>">

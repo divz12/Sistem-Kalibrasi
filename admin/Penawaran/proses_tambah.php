@@ -33,7 +33,7 @@ $sqlSimpan = "
   INSERT INTO tbl_penawaran
     (id_pengajuan, id_admin, tanggal_penawaran, total_biaya, rincian, status_penawaran, created_at)
   VALUES
-    ('$id_pengajuan', '$id_admin', '$tanggal_penawaran', '$total_biaya', '$rincian', '$status_penawaran', NOW())
+    ('$id_pengajuan', '$id_admin', '$tanggal_penawaran', '$total_biaya', '$rincian', 'negosiasi', NOW())
 ";
 $simpan = mysqli_query($conn, $sqlSimpan);
 

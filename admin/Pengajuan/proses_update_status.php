@@ -36,6 +36,6 @@ if (!$jalan) {
   exit();
 }
 
-header("Location: detail_pengajuan.php?id=".$id_pengajuan."&msg=ok");
+header("Location: pengajuan.php?id=".$id_pengajuan."&msg=ok");
 exit();
 ?>

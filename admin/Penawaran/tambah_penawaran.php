@@ -14,21 +14,43 @@ if ($role != "admin" && $role != "cs") {
   exit();
 }
 
+// $sqlPengajuan = "
+//   SELECT
+//     tbl_pengajuan_kalibrasi.id_pengajuan,
+//     tbl_pengajuan_kalibrasi.tanggal_pengajuan,
+//     tbl_pengajuan_kalibrasi.status_pengajuan,
+
+//     tbl_users.nama,
+//     tbl_users.email
+
+//   FROM tbl_pengajuan_kalibrasi
+//   LEFT JOIN tbl_pelanggan
+//     ON tbl_pelanggan.id_pelanggan = tbl_pengajuan_kalibrasi.id_pelanggan
+//   LEFT JOIN tbl_users
+//     ON tbl_users.id_user = tbl_pelanggan.id_user
+//   ORDER BY tbl_pengajuan_kalibrasi.id_pengajuan DESC
+// ";
+
+
 $sqlPengajuan = "
-  SELECT
-    tbl_pengajuan_kalibrasi.id_pengajuan,
-    tbl_pengajuan_kalibrasi.tanggal_pengajuan,
-    tbl_pengajuan_kalibrasi.status_pengajuan,
+SELECT
+  tbl_pengajuan_kalibrasi.id_pengajuan,
+  tbl_pengajuan_kalibrasi.tanggal_pengajuan,
+  tbl_pengajuan_kalibrasi.status_pengajuan,
+  tbl_users.nama,
+  tbl_users.email
+FROM tbl_pengajuan_kalibrasi
 
-    tbl_users.nama,
-    tbl_users.email
+LEFT JOIN tbl_pelanggan
+  ON tbl_pelanggan.id_pelanggan = tbl_pengajuan_kalibrasi.id_pelanggan
+LEFT JOIN tbl_users
+  ON tbl_users.id_user = tbl_pelanggan.id_user
 
-  FROM tbl_pengajuan_kalibrasi
-  LEFT JOIN tbl_pelanggan
-    ON tbl_pelanggan.id_pelanggan = tbl_pengajuan_kalibrasi.id_pelanggan
-  LEFT JOIN tbl_users
-    ON tbl_users.id_user = tbl_pelanggan.id_user
-  ORDER BY tbl_pengajuan_kalibrasi.id_pengajuan DESC
+LEFT JOIN tbl_penawaran
+  ON tbl_penawaran.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
+
+WHERE tbl_penawaran.id_pengajuan IS NULL
+ORDER BY tbl_pengajuan_kalibrasi.id_pengajuan DESC;
 ";
 $hasilPengajuan = mysqli_query($conn, $sqlPengajuan);
 if (!$hasilPengajuan) {
@@ -84,16 +106,6 @@ include "../komponen/navbar.php";
         <div class="mt-3">
           <label class="form-label">Rincian Penawaran</label>
           <textarea name="rincian" class="form-control" rows="4" placeholder="Tulis rincian biaya / detail pekerjaan" required></textarea>
-        </div>
-
-        <div class="mt-3">
-          <label class="form-label">Status Penawaran</label>
-          <select name="status_penawaran" class="form-control" required>
-            <option value="dikirim">dikirim</option>
-            <option value="negosiasi">negosiasi</option>
-            <option value="diterima">diterima</option>
-            <option value="ditolak">ditolak</option>
-          </select>
         </div>
 
         <hr class="my-4">
