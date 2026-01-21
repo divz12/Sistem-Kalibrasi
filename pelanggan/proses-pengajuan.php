@@ -92,3 +92,4 @@ for ($i = 0; $i < count($nama_alat); $i++) {
 
 header("Location: pengajuan.php?msg=ok");
 exit();
+?>

@@ -84,3 +84,4 @@ if (!$upd) {
 
 header("Location: penawaran.php?msg=paid");
 exit();
+?>

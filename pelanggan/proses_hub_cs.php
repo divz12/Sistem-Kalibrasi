@@ -42,3 +42,4 @@ if ($simpan) {
   header("Location: hub-cs.php?msg=err");
   exit();
 }
+?>

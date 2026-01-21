@@ -91,9 +91,7 @@ function badgeStatus($status)
   return "bg-label-secondary";
 }
 
-// =========================
-// KUNCI STATUS JIKA SELESAI
-// =========================
+
 $statusLower = strtolower($dataPengajuan["status_pengajuan"] ?? "");
 $kunciStatus = ($statusLower == "selesai");
 
@@ -188,7 +186,6 @@ include "../komponen/navbar.php";
           <input type="hidden" name="id_pengajuan" value="<?= $idPengajuan; ?>">
 
           <?php if ($kunciStatus): ?>
-            <!-- supaya nilai status tetap terkirim walau select disabled -->
             <input type="hidden" name="status_pengajuan" value="selesai">
           <?php endif; ?>
 

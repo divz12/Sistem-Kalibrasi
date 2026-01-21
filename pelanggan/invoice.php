@@ -56,10 +56,6 @@ if ($invoicePunyaIdPengajuan || $invoicePunyaIdPenawaran) {
   $namaFileSelect = ($kolomNamaFile != "") ? "tbl_invoice.$kolomNamaFile AS nama_file_invoice" : "NULL AS nama_file_invoice";
   $lokFileSelect  = ($kolomLokasiFile != "") ? "tbl_invoice.$kolomLokasiFile AS lokasi_file_invoice" : "NULL AS lokasi_file_invoice";
 
-  // ============================
-  // ✅ PERUBAHAN YANG DIPERLUKAN:
-  // Tambahkan id_invoice biar tombol unduh bisa pakai id_invoice
-  // ============================
   $selectInvoice = "
     tbl_invoice.id_invoice,
     tbl_invoice.nomor_invoice,
@@ -70,17 +66,12 @@ if ($invoicePunyaIdPengajuan || $invoicePunyaIdPenawaran) {
     $lokFileSelect
   ";
 
-  // ============================
-  // ✅ PERUBAHAN YANG DIPERLUKAN:
-  // Join invoice lewat id_penawaran (sesuai invoice dibuat setelah penawaran diterima)
-  // ============================
   if ($invoicePunyaIdPenawaran) {
     $joinInvoice = "
       LEFT JOIN tbl_invoice
         ON tbl_invoice.id_penawaran = tbl_penawaran.id_penawaran
     ";
   } else {
-    // fallback kalau DB kamu ternyata masih pakai id_pengajuan
     $joinInvoice = "
       LEFT JOIN tbl_invoice
         ON tbl_invoice.id_pengajuan = tbl_pengajuan_kalibrasi.id_pengajuan
@@ -138,11 +129,6 @@ function badgeStatus($status) {
   return 'bg-secondary';
 }
 
-// ============================
-// ✅ PERUBAHAN YANG DIPERLUKAN:
-// Status invoice berdasar ADA/TIDAK invoice + status_pembayaran
-// (bukan lagi status_pengajuan selesai)
-// ============================
 function statusInvoiceDariData($id_invoice, $status_pembayaran) {
   $id = (int)($id_invoice ?? 0);
   if ($id <= 0) return ['Belum tersedia', 'bg-secondary'];
@@ -170,10 +156,6 @@ function statusInvoiceDariData($id_invoice, $status_pembayaran) {
       </a>
     </div>
 
-    <!-- ============================
-         ✅ PERUBAHAN YANG DIPERLUKAN:
-         Info invoice tersedia jika penawaran diterima & invoice sudah dibuat
-    ============================ -->
     <div class="alert alert-info">
       Invoice akan <b>tersedia</b> setelah penawaran <b>diterima</b> (invoice dibuat otomatis oleh sistem).
     </div>
@@ -214,10 +196,6 @@ function statusInvoiceDariData($id_invoice, $status_pembayaran) {
                   <?php
                     $total = (float)($row['total_biaya'] ?? 0);
 
-                    // ============================
-                    // ✅ PERUBAHAN YANG DIPERLUKAN:
-                    // ambil id_invoice & status_pembayaran
-                    // ============================
                     $idInvoice = (int)($row['id_invoice'] ?? 0);
                     $statusBayar = $row['status_pembayaran'] ?? '';
 
@@ -225,7 +203,6 @@ function statusInvoiceDariData($id_invoice, $status_pembayaran) {
                     $labelInv = $infoInv[0];
                     $badgeInv = $infoInv[1];
 
-                    // tombol unduh aktif kalau invoice ada
                     $bisaUnduh = ($idInvoice > 0);
                   ?>
                   <tr>
@@ -255,10 +232,6 @@ function statusInvoiceDariData($id_invoice, $status_pembayaran) {
                         </a>
 
                         <?php if ($bisaUnduh): ?>
-                          <!-- ============================
-                               ✅ PERUBAHAN YANG DIPERLUKAN:
-                               Unduh pakai id_invoice (sesuai unduh_invoice.php)
-                          ============================ -->
                           <a class="btn btn-sm btn-outline-success"
                              href="unduh_invoice.php?id_invoice=<?= $idInvoice; ?>">
                             Unduh Invoice

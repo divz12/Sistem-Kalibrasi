@@ -310,3 +310,4 @@ $pdf->Cell(0, 5, 'Nama: ____________________', 0, 1);
 $filename = 'INVOICE-' . ($inv['nomor_invoice'] ?? $id_invoice) . '.pdf';
 $pdf->Output('D', $filename);
 exit();
+?>

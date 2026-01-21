@@ -8,7 +8,7 @@ if (!isset($_SESSION['id_user']) || ($_SESSION['role'] ?? '') !== 'pelanggan') {
   exit();
 }
 
-// ✅ PATH FPDF YANG BENAR (pelanggan -> ../lib/fpdf/fpdf.php)
+// PATH
 require_once __DIR__ . "/../lib/fpdf/fpdf.php";
 
 function rupiah_angka($angka)
@@ -18,11 +18,11 @@ function rupiah_angka($angka)
 
 $id_user = (int)($_SESSION['id_user'] ?? 0);
 
-// ✅ SUPPORT 2 PARAMETER: id_invoice (baru) ATAU id_pengajuan (tombol lama)
+
 $id_invoice = (int)($_GET['id_invoice'] ?? 0);
 $id_pengajuan_get = (int)($_GET['id_pengajuan'] ?? 0);
 
-// ====== AMBIL id_pelanggan dari user ======
+
 $qPel = mysqli_query($conn, "SELECT id_pelanggan FROM tbl_pelanggan WHERE id_user='$id_user' LIMIT 1");
 $dataPel = $qPel ? mysqli_fetch_assoc($qPel) : null;
 $id_pelanggan = (int)($dataPel['id_pelanggan'] ?? 0);
@@ -32,10 +32,7 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-// ============================
-// ✅ kalau user kirim id_pengajuan, cari invoice terbaru untuk pengajuan tsb
-// invoice terhubung via tbl_invoice.id_penawaran -> tbl_penawaran.id_pengajuan
-// ============================
+
 if ($id_invoice <= 0 && $id_pengajuan_get > 0) {
   $sqlCariInvoice = "
     SELECT i.id_invoice
@@ -57,9 +54,7 @@ if ($id_invoice <= 0) {
   exit();
 }
 
-/*
-  Ambil invoice + relasi sampai pelanggan
-*/
+
 $sqlInv = "
   SELECT
     i.id_invoice,
@@ -123,7 +118,7 @@ if ((int)($inv['id_pelanggan'] ?? 0) !== $id_pelanggan) {
 //     exit();
 //   }
 // }
-// kalau file tidak ada / kosong -> lanjut generate PDF pakai FPDF (kode di bawah)
+// kalau file tidak ada / kosong 
 
 $id_pengajuan = (int)($inv['id_pengajuan'] ?? 0);
 if ($id_pengajuan <= 0) {
@@ -145,7 +140,7 @@ if ($qAlat) {
   }
 }
 
-// ====== BIKIN HARGA PER ITEM (bagi rata) ======
+// ====== BIKIN HARGA PER ITEM ======
 $totalTagihan = (float)($inv['total_tagihan'] ?? 0);
 $totalQty = 0;
 foreach ($items as $it) {
@@ -241,7 +236,7 @@ $pdf->SetFont('Arial', '', 9);
 $pdf->Cell(0, 5, 'Testing & Calibration Services | Maintenance & Technical Services', 0, 1, 'L');
 $pdf->Ln(2);
 
-// ====== KOTAK CUSTOMER (KIRI) ======
+// ====== KOTAK CUSTOMER ======
 $yTop = $pdf->GetY();
 $pdf->Rect(10, $yTop, 110, 32);
 
@@ -269,7 +264,7 @@ $pdf->Cell(20, 5, 'Email', 0, 0);
 $pdf->SetFont('Arial', '', 9);
 $pdf->Cell(0, 5, ': ' . ($inv['email_pelanggan'] ?? '-'), 0, 1);
 
-// ====== KOTAK INVOICE (KANAN) ======
+// ====== KOTAK INVOICE ======
 $pdf->SetXY(125, $yTop);
 $pdf->Rect(125, $yTop, 75, 32);
 
@@ -341,7 +336,7 @@ if (count($items) == 0) {
   }
 }
 
-// ====== TOTAL BOX (TANPA DISKON) ======
+// ====== TOTAL BOX ======
 $pdf->SetFont('Arial', 'B', 9);
 $y = $pdf->GetY();
 $pdf->Rect(129, $y, 71, 18);
@@ -389,3 +384,4 @@ $pdf->Cell(0, 5, 'Nama: ____________________', 0, 1);
 $filename = 'INVOICE-' . ($inv['nomor_invoice'] ?? $id_invoice) . '.pdf';
 $pdf->Output('D', $filename);
 exit();
+?>

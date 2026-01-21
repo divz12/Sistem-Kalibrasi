@@ -16,7 +16,7 @@ if ($role != "admin" && $role != "cs") {
 
 $namaAdmin = $_SESSION["nama"] ?? "Admin";
 
-$urut = $_GET["urut"] ?? "status"; // default: urut berdasarkan status
+$urut = $_GET["urut"] ?? "status";
 
 // default order by (status)
 $orderBySql = "
@@ -41,7 +41,7 @@ if ($urut == "terbaru") {
 } elseif ($urut == "biaya_terendah") {
   $orderBySql = "ORDER BY tbl_penawaran.total_biaya ASC, tbl_penawaran.id_penawaran DESC";
 } else {
-  // tetap status (default)
+  
 }
 
 $sql = "

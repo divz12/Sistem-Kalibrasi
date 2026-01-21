@@ -51,3 +51,4 @@ if (isset($_FILES['filefoto']) && $_FILES['filefoto']['name'] != "") {
 
 header("Location: profil.php?msg=ok");
 exit();
+?>

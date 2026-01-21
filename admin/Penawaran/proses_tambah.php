@@ -44,3 +44,4 @@ if (!$simpan) {
 
 header("Location: penawaran.php?msg=ok");
 exit();
+?>
