@@ -19,46 +19,6 @@ if ($id_pelanggan <= 0) {
   exit();
 }
 
-$markerDir = __DIR__ . "/../storage/terima_pengiriman";
-function sudahTerimaPengiriman_file($markerDir, $id_pengajuan) {
-  $file = rtrim($markerDir, "/") . "/" . (int)$id_pengajuan . ".txt";
-  return file_exists($file);
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['aksi'] ?? '') === 'terima_pengiriman') {
-  $id_pengajuan_post = (int)($_POST['id_pengajuan'] ?? 0);
-
-  if ($id_pengajuan_post > 0) {
-    // pastikan pengajuan milik pelanggan dan status_pengajuan sudah selesai
-    $qCek = mysqli_query($conn, "
-      SELECT status_pengajuan
-      FROM tbl_pengajuan_kalibrasi
-      WHERE id_pengajuan = '$id_pengajuan_post'
-        AND id_pelanggan = '$id_pelanggan'
-      LIMIT 1
-    ");
-    $cekRow = $qCek ? mysqli_fetch_assoc($qCek) : null;
-
-    if ($cekRow) {
-      $st = strtolower($cekRow['status_pengajuan'] ?? '');
-      if ($st === 'selesai') {
-        if (!is_dir($markerDir)) {
-          @mkdir($markerDir, 0777, true);
-        }
-        $file = rtrim($markerDir, "/") . "/" . $id_pengajuan_post . ".txt";
-        @file_put_contents($file, "DITERIMA|" . date("Y-m-d H:i:s"));
-        header("Location: status_proses.php?msg=ok_terima");
-        exit();
-      }
-    }
-  }
-
-  header("Location: status_proses.php?msg=err_terima");
-  exit();
-}
-
-
-// query list status proses
 $sql = "
   SELECT
     tbl_pengajuan_kalibrasi.id_pengajuan,
@@ -105,7 +65,7 @@ function timelineText($status_pengajuan, $status_penawaran) {
     ['judul' => 'Pengajuan Masuk', 'desc' => 'Pengajuan kamu sudah diterima sistem.'],
     ['judul' => 'Penawaran', 'desc' => 'Admin menyiapkan penawaran.'],
     ['judul' => 'Proses Kalibrasi', 'desc' => 'Alat diproses sesuai prosedur kalibrasi.'],
-    ['judul' => 'Pengiriman Dokumen & Alat', 'desc' => 'Dokumen & alat sedang dikirim. Klik tombol Terima jika sudah diterima.'],
+    ['judul' => 'Pengiriman Dokumen & Alat', 'desc' => 'Sertifikat/invoice disiapkan jika proses selesai.'],
   ];
 
   $aktif = 1;
@@ -131,7 +91,7 @@ function timelineText($status_pengajuan, $status_penawaran) {
     $aktif = 3;
   }
 
-  // Pengajuan selesai (kalibrasi selesai -> masuk tahap pengiriman)
+  // Pengajuan selesai
   if ($status_pengajuan == 'selesai' || $status_pengajuan == 'Selesai' || $status_pengajuan == 'SELESAI') {
     $aktif = 4;
   }
@@ -165,12 +125,6 @@ function timelineText($status_pengajuan, $status_penawaran) {
       </a>
     </div>
 
-    <?php if (($_GET['msg'] ?? '') === 'ok_terima'): ?>
-      <div class="alert alert-success">Berhasil konfirmasi penerimaan dokumen & alat.</div>
-    <?php elseif (($_GET['msg'] ?? '') === 'err_terima'): ?>
-      <div class="alert alert-danger">Gagal konfirmasi penerimaan. Pastikan status sudah selesai.</div>
-    <?php endif; ?>
-
     <?php if (!$data || mysqli_num_rows($data) == 0): ?>
       <div class="alert alert-info">
         Kamu belum punya pengajuan. Silakan buat pengajuan dulu di menu <b>Ajukan Kalibrasi</b>.
@@ -186,8 +140,6 @@ function timelineText($status_pengajuan, $status_penawaran) {
           $badgePenawaran = badgeStatusPenawaran($statusPenawaran);
 
           list($timeline, $aktif) = timelineText($statusPengajuan, $statusPenawaran);
-      
-          $terimaPengiriman = sudahTerimaPengiriman_file($markerDir, $row['id_pengajuan']);
         ?>
 
         <div class="card shadow-sm border-0 mb-3">
@@ -235,15 +187,7 @@ function timelineText($status_pengajuan, $status_penawaran) {
                       <span class="badge <?= ($step <= $aktif) ? 'bg-success' : 'bg-secondary'; ?>">
                         <?= $step; ?>
                       </span>
-
-                      <?php if ($step == 4 && $aktif == 4): ?>
-                        <?php if ($terimaPengiriman): ?>
-                          <span class="badge bg-success">Selesai</span>
-                        <?php else: ?>
-                          <span class="badge bg-warning text-dark">Sedang berjalan</span>
-                        <?php endif; ?>
-
-                      <?php elseif ($step == $aktif): ?>
+                      <?php if ($step == $aktif): ?>
                         <span class="badge bg-warning text-dark">Sedang berjalan</span>
                       <?php elseif ($step < $aktif): ?>
                         <span class="badge bg-success">Selesai</span>
@@ -272,23 +216,6 @@ function timelineText($status_pengajuan, $status_penawaran) {
                 <a href="penawaran.php" class="btn btn-outline-primary btn-sm">
                   Cek Penawaran
                 </a>
-              <?php endif; ?>
-
-              <?php
-                $statusLower = strtolower($statusPengajuan ?? '');
-                $bolehTerima = ($statusLower == 'selesai' && !$terimaPengiriman);
-              ?>
-              <?php if ($bolehTerima): ?>
-                <form method="post" class="d-inline">
-                  <input type="hidden" name="aksi" value="terima_pengiriman">
-                  <input type="hidden" name="id_pengajuan" value="<?= (int)$row['id_pengajuan']; ?>">
-                  <button type="submit" class="btn btn-success btn-sm"
-                    onclick="return confirm('Yakin sudah menerima dokumen & alat?')">
-                    Terima Dokumen & Alat
-                  </button>
-                </form>
-              <?php elseif ($statusLower == 'selesai' && $terimaPengiriman): ?>
-                <span class="badge bg-success align-self-center">Pengiriman: diterima</span>
               <?php endif; ?>
 
             </div>

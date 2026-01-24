@@ -168,7 +168,6 @@ include "../komponen/navbar.php";
                 }
 
                 echo "<td>
-                        <a class='btn btn-sm btn-warning' href='edit_invoice.php?id=".$idInvoice."'>Edit</a>
                         <a class='btn btn-sm btn-danger' href='hapus_invoice.php?id=".$idInvoice."'
                           onclick=\"return confirm('Yakin hapus invoice ini?')\">Hapus</a>
                       </td>";

@@ -11,7 +11,7 @@
         </a>
         <p class="mt-3">
           Penyedia jasa kalibrasi alat ukur dan konsultasi kalibrasi yang profesional,
-          akurat, dan terpercaya sesuai standar ISO/IEC 17025:2017.
+          akurat, dan terpercaya sesuai standar ISO/IEC 17025:2017. Dan untuk alat ukur kalibrasi Terbit Sertifikat KAN.
         </p>
         <div class="footer-contact pt-2">
           <p><strong>Alamat:</strong> Kab. Bogor, Jawa Barat, Indonesia</p>
@@ -52,7 +52,7 @@
       <div class="col-lg-4 col-md-6">
         <h4>Lokasi Kami</h4>
         <iframe 
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7228804231922!2d107.00615337402817!3d-6.429635862873902!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6997430692b039%3A0xdfc31d9f2d5be972!2sAkbar%20Karya%20kipas!5e0!3m2!1sen!2sid!4v1768839412562!5m2!1sen!2sid"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d573.5798482778936!2d107.00834230021492!3d-6.429762730462276!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6997fc20711beb%3A0xc0bd8245d62b1a71!2sPT%20Akbar%20tera%20Abadi!5e0!3m2!1sid!2sid!4v1769059776320!5m2!1sid!2sid"
           frameborder="0"
           style="border:0; width:100%; height:220px;"
           allowfullscreen=""

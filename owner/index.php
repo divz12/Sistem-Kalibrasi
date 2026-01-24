@@ -232,10 +232,6 @@ if ($queryDaftarInvoiceBelumDibayar) {
   }
 }
 
-// ======================
-// Aktivitas Terbaru (tanpa pesan CS)
-// Pengajuan + Penawaran + Invoice + Sertifikat
-// ======================
 $listAktivitas = [];
 
 $sqlAktivitasGabungan = "
@@ -440,7 +436,6 @@ include 'komponen/navbar.php';
             <div class="fw-semibold">
               <i class="bi bi-inboxes me-2 text-primary"></i>Pengajuan Terbaru
             </div>
-            <a href="#" class="small text-decoration-none">Lihat semua</a>
           </div>
 
           <div class="card-body">

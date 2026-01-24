@@ -10,7 +10,7 @@ function menuActive($pages, $current) {
 
 $namaAdmin = $_SESSION['nama'] ?? 'Admin';
 
-$root = "/Sistem-Kalibrasi/";
+$root = "https://akbarteraabadi.page.gd/";
 ?>
 
 <!-- Layout wrapper -->

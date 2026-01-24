@@ -1,8 +1,8 @@
 <?php
-$host = "localhost";
-$user = "root";
-$pass = "";
-$db   = "dbsistem_kalibrasi";
+$host = "sql210.infinityfree.com";
+$user = "if0_40963722";
+$pass = "sistemKalibrasi";
+$db   = "if0_40963722_dbsistem_kalibrasi";
 
 $conn = new mysqli($host, $user, $pass, $db);
 

@@ -1,6 +1,6 @@
 
 <?php
-$root = "/Sistem-Kalibrasi/";
+$root = "https://akbarteraabadi.page.gd/";
 ?>
 <!-- Layout container -->
 <div class="layout-page">

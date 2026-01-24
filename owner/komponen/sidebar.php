@@ -9,7 +9,7 @@ function menuActive($pages, $current) {
 }
 
 $namaOwner = $_SESSION['nama'] ?? 'Owner';
-$root = "/Sistem-Kalibrasi/";
+$root = "akbarteraabadi.page.gd/"
 ?>
 
 <!-- Layout wrapper -->
@@ -39,7 +39,7 @@ $root = "/Sistem-Kalibrasi/";
       <ul class="menu-inner py-1">
 
         <li class="menu-item <?= menuActive('index.php', $current); ?>">
-          <a href="<?= $root; ?>owner/index.php" class="menu-link">
+          <a href="index.php" class="menu-link">
             <i class="menu-icon tf-icons bx bx-home-circle"></i>
             <div>Dashboard</div>
           </a>
@@ -51,7 +51,7 @@ $root = "/Sistem-Kalibrasi/";
 
 
         <li class="menu-item <?= menuActive('laporan.php', $current); ?>">
-          <a href="<?= $root; ?>owner/laporan.php" class="menu-link">
+          <a href="laporan.php" class="menu-link">
             <i class="menu-icon tf-icons bx bx-bar-chart-alt-2"></i>
             <div>Laporan</div>
           </a>
@@ -62,7 +62,7 @@ $root = "/Sistem-Kalibrasi/";
         </li>
 
         <li class="menu-item mt-2">
-          <a href="<?= $root; ?>logout.php" class="menu-link" onclick="return confirm('Yakin ingin logout?');">
+          <a href="../../logout.php" class="menu-link" onclick="return confirm('Yakin ingin logout?');">
             <i class="menu-icon tf-icons bx bx-log-out"></i>
             <div>Logout</div>
           </a>

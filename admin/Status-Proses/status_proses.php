@@ -136,7 +136,7 @@ function tahapProses($statusPengajuanLower, $statusPenawaranLower)
   }
 
   if ($statusPengajuanLower == "selesai") {
-    $tahap = "Dokumen";
+    $tahap = "Pengiriman Dokumen & Alat";
   }
 
   if ($statusPengajuanLower == "ditolak" || $statusPenawaranLower == "ditolak") {

@@ -253,7 +253,7 @@ include 'komponen/navbar.php';
     <!-- Sponsor Section -->
     <section id="services" class="services section light-background">
         <div class="container section-title" data-aos="fade-up">
-            <h2>Sponsor Kami</h2>
+            <h2>Customer Kami</h2>
             <p>Beberapa perusahaan yang telah mempercayakan layanan PT Akbar Tera Abadi</p>
         </div>
 
@@ -280,7 +280,7 @@ include 'komponen/navbar.php';
                 <h3>Ruang Lingkup Layanan Kalibrasi</h3>
                 <p>
                 PT Akbar Tera Abadi melayani kalibrasi berbagai jenis alat ukur dari berbagai bidang,
-                dikerjakan oleh teknisi profesional sesuai standar ISO/IEC 17025.
+                dikerjakan oleh teknisi profesional sesuai standar ISO/IEC 17025. Dan untuk alat ukur kalibrasi Terbit Sertifikat KAN.
                 </p>
 
                 <div class="row">

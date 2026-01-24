@@ -89,8 +89,7 @@ include "../komponen/navbar.php";
               <select name="role" class="form-control" required>
                 <option value="">-- Pilih Role --</option>
                 <option value="admin" <?= ($data["role"] == "admin") ? "selected" : ""; ?>>admin</option>
-                <option value="cs" <?= ($data["role"] == "cs") ? "selected" : ""; ?>>cs</option>
-                <option value="admin_cs" <?= ($data["role"] == "admin_cs") ? "selected" : ""; ?>>admin_cs</option>
+                <option value="owner" <?= ($data["role"] == "owner") ? "selected" : ""; ?>>owner</option>
                 <option value="pelanggan" <?= ($data["role"] == "pelanggan") ? "selected" : ""; ?>>pelanggan</option>
               </select>
             </div>

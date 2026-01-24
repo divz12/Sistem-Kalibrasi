@@ -144,7 +144,7 @@ include 'komponen/navbar.php';
               <div class="col-md-6">
                 <label class="form-label">Titik Ukur <?= $i === 1 ? '<span class="text-danger">*</span>' : '' ?></label>
                 <input type="text" name="titik_ukur[]" class="form-control"
-                       placeholder="Contoh: 1kg, 5kg, 10kg (pisahkan koma)" <?= $i === 1 ? 'required' : '' ?>>
+                       placeholder="Contoh: 1kg, 5kg, 10kg" <?= $i === 1 ? 'required' : '' ?>>
               </div>
 
               <div class="col-12">

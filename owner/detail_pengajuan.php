@@ -1,5 +1,7 @@
 <?php
-session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+    session_start();
 include "../koneksi.php";
 
 // ======================
@@ -59,17 +61,16 @@ $pengajuan = null;
 
 $sqlPengajuan = "
   SELECT 
-    tbl_pengajuan_kalibrasi.*,
-    tbl_users.nama AS nama_pelanggan,
-    tbl_users.email AS email_pelanggan
-  FROM tbl_pengajuan_kalibrasi
-  INNER JOIN tbl_pelanggan 
-    ON tbl_pelanggan.id_pelanggan = tbl_pengajuan_kalibrasi.id_pelanggan
-  INNER JOIN tbl_users
-    ON tbl_users.id_user = tbl_pelanggan.id_user
-  WHERE tbl_pengajuan_kalibrasi.id_pengajuan = '$id_pengajuan'
+    p.*,
+    pl.alamat,
+    pl.no_hp
+  FROM tbl_pengajuan_kalibrasi p
+  LEFT JOIN tbl_pelanggan pl 
+    ON pl.id_pelanggan = p.id_pelanggan
+  WHERE p.id_pengajuan = '$id_pengajuan'
   LIMIT 1
 ";
+
 
 $queryPengajuan = mysqli_query($conn, $sqlPengajuan);
 if ($queryPengajuan) {
@@ -149,45 +150,27 @@ if ($id_penawaran > 0) {
 }
 
 // ======================
-// 5) Ambil sertifikat (bisa via id_pengajuan atau id_invoice)
-// tbl_sertifikat.id_pengajuan / tbl_sertifikat.id_invoice
+// 5) Ambil sertifikat (BERDASARKAN id_pengajuan SAJA)
 // ======================
 $sertifikat = null;
 $status_sertifikat = '-';
 
-$sqlSertifikatA = "
+$sqlSertifikat = "
   SELECT *
   FROM tbl_sertifikat
   WHERE id_pengajuan = '$id_pengajuan'
   ORDER BY id_sertifikat DESC
   LIMIT 1
 ";
-$querySertifikatA = mysqli_query($conn, $sqlSertifikatA);
-if ($querySertifikatA) {
-  $sertifikat = mysqli_fetch_assoc($querySertifikatA);
-}
 
-// kalau belum ada, coba cari berdasarkan invoice
-if (!$sertifikat && $id_invoice > 0) {
-
-  $sqlSertifikatB = "
-    SELECT *
-    FROM tbl_sertifikat
-    WHERE id_invoice = '$id_invoice'
-    ORDER BY id_sertifikat DESC
-    LIMIT 1
-  ";
-
-  $querySertifikatB = mysqli_query($conn, $sqlSertifikatB);
-  if ($querySertifikatB) {
-    $sertifikat = mysqli_fetch_assoc($querySertifikatB);
-  }
+$querySertifikat = mysqli_query($conn, $sqlSertifikat);
+if ($querySertifikat) {
+  $sertifikat = mysqli_fetch_assoc($querySertifikat);
 }
 
 if ($sertifikat) {
-  // kalau ada kolom status_sertifikat -> pakai
-  // kalau tidak ada -> default "Terbit"
-  $status_sertifikat = $sertifikat['status_sertifikat'] ?? 'Terbit';
+  // karena tidak ada kolom status, anggap TERBIT
+  $status_sertifikat = 'Terbit';
 }
 
 $base = "../";
@@ -216,7 +199,10 @@ include "komponen/navbar.php";
           <div>
             <h5 class="mb-1">Pengajuan #<?= $pengajuan['id_pengajuan']; ?></h5>
             <div class="text-muted small">Tanggal pengajuan: <?= $pengajuan['tanggal_pengajuan'] ?? '-'; ?></div>
-            <div class="text-muted small">Pelanggan: <?= $pengajuan['nama_pelanggan'] ?? '-'; ?> (<?= $pengajuan['email_pelanggan'] ?? '-'; ?>)</div>
+            <div class="text-muted small">
+  Alamat: <?= $pengajuan['alamat'] ?? '-'; ?> |
+  No HP: <?= $pengajuan['no_hp'] ?? '-'; ?>
+</div>
           </div>
 
           <span class="badge <?= badgeStatus($pengajuan['status_pengajuan'] ?? ''); ?> px-3 py-2">
